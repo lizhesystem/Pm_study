@@ -47,8 +47,10 @@ public class SysLoginService {
     public String login(String username, String password, String code, String uuid) {
         String verifyKey = Constants.CAPTCHA_CODE_KEY + uuid;
         String captcha = redisCache.getCacheObject(verifyKey);
+        // 删除以前的redis数据
         redisCache.deleteObject(verifyKey);
         if (captcha == null) {
+            // 单例线程池方式，使用aop封装登录错误日志
             AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.jcaptcha.error")));
             throw new CaptchaExpireException();
         }
@@ -59,7 +61,7 @@ public class SysLoginService {
         // 用户验证
         Authentication authentication = null;
         try {
-            // 该方法会去调用UserDetailsServiceImpl.loadUserByUsername
+            // 该方法会去调用UserDetailsServiceImpl.loadUserByUsername 在security里,依然记录日志
             authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (Exception e) {
@@ -72,8 +74,9 @@ public class SysLoginService {
             }
         }
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
+        // 得到登录用户身份权限的类
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        // 生成token
+        // 生成token 调用一些方法,设置代理获取ip,刷新token的失效时间,覆盖redis,封装到了LoginUser对象。
         return tokenService.createToken(loginUser);
     }
 }

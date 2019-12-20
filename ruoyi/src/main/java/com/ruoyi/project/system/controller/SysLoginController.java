@@ -48,10 +48,12 @@ public class SysLoginController {
      */
     @PostMapping("/login")
     public AjaxResult login(String username, String password, String code, String uuid) {
+        // 根据自定义异常类封装返回数据
         AjaxResult ajax = AjaxResult.success();
         // 生成令牌
         String token = loginService.login(username, password, code, uuid);
         ajax.put(Constants.TOKEN, token);
+        // 返回token
         return ajax;
     }
 

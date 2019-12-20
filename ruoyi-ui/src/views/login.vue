@@ -48,7 +48,7 @@
     </el-form>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>Copyright © 2018-2019 ruoyi.vip All Rights Reserved.</span>
+      <!--<span>Copyright © 2018-2019 ruoyi.vip All Rights Reserved.</span>-->
     </div>
   </div>
 </template>
@@ -64,6 +64,7 @@
       return {
         codeUrl: '',
         cookiePassword: '',
+        // 提交的表单数据,created先获取,如果能获取到这里就有之前的数据了
         loginForm: {
           username: 'admin',
           password: 'admin123',
@@ -93,11 +94,14 @@
       }
     },
     created() {
+      // 获取验证码和uuid
       this.getCode()
+      // 从cookies里获取登录需要记录的数据
       this.getCookie()
     },
     methods: {
       getCode() {
+        // 先调用方法获取服务器端的验证码和uuid
         getCodeImg().then(res => {
           this.codeUrl = 'data:image/gif;base64,' + res.img
           this.loginForm.uuid = res.uuid
@@ -108,6 +112,7 @@
         const password = Cookies.get('password')
         const rememberMe = Cookies.get('rememberMe')
         this.loginForm = {
+          // 不用判断三元表达式
           username: username === undefined ? this.loginForm.username : username,
           password: password === undefined ? this.loginForm.password : decrypt(password),
           rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
@@ -117,15 +122,18 @@
         this.$refs.loginForm.validate(valid => {
           if (valid) {
             this.loading = true
+            // 如果勾选了rememberMe那就先在cookies里储存数据,时间设置30分钟
             if (this.loginForm.rememberMe) {
               Cookies.set('username', this.loginForm.username, { expires: 30 })
               Cookies.set('password', encrypt(this.loginForm.password), { expires: 30 })
               Cookies.set('rememberMe', this.loginForm.rememberMe, { expires: 30 })
+              // 如果提交的时候不勾选,默认删除
             } else {
               Cookies.remove('username')
               Cookies.remove('password')
               Cookies.remove('rememberMe')
             }
+            // 发起请求第一次没有token,axios响应拦截器收到状态码是200的话就放行
             this.$store
               .dispatch('Login', this.loginForm)
               .then(() => {

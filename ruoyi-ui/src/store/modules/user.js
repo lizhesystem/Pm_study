@@ -31,11 +31,13 @@ const user = {
   actions: {
     // 登录
     Login({ commit }, userInfo) {
+      // 表单数据
       const username = userInfo.username.trim()
       const password = userInfo.password
       const code = userInfo.code
       const uuid = userInfo.uuid
       return new Promise((resolve, reject) => {
+        // 发起请求,这里请求是post,使用params: data方式封装成key=value&xx格式，后端post直接接收字符串
         login(username, password, code, uuid).then(res => {
           setToken(res.token)
           commit('SET_TOKEN', res.token)

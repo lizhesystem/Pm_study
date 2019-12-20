@@ -16,7 +16,7 @@ import com.ruoyi.framework.web.domain.AjaxResult;
 
 /**
  * 验证码操作处理
- * 
+ *
  * @author ruoyi
  */
 @RestController
@@ -33,10 +33,11 @@ public class CaptchaController
     {
         // 生成随机字串
         String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
-        // 唯一标识
+        // 生成唯一标识uuid
         String uuid = IdUtils.simpleUUID();
+        // captcha_codes: + uuid
         String verifyKey = Constants.CAPTCHA_CODE_KEY + uuid;
-
+        // 调用工具类放到Redis  默认2分钟
         redisCache.setCacheObject(verifyKey, verifyCode, Constants.CAPTCHA_EXPIRATION, TimeUnit.MINUTES);
         // 生成图片
         int w = 111, h = 36;
@@ -47,6 +48,7 @@ public class CaptchaController
             AjaxResult ajax = AjaxResult.success();
             ajax.put("uuid", uuid);
             ajax.put("img", Base64.encode(stream.toByteArray()));
+            // 返回生成的uuid和验证码图片
             return ajax;
         }
         catch (Exception e)

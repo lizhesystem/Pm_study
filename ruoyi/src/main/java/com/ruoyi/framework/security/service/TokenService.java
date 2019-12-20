@@ -95,6 +95,7 @@ public class TokenService {
      * @return 令牌
      */
     public String createToken(LoginUser loginUser) {
+        // 生成uuid设置到对象里
         String token = IdUtils.fastUUID();
         loginUser.setToken(token);
         setUserAgent(loginUser);
@@ -127,7 +128,9 @@ public class TokenService {
      * @param loginUser 登录信息
      */
     public void refreshToken(LoginUser loginUser) {
+        // 设置登录的时间
         loginUser.setLoginTime(System.currentTimeMillis());
+        // 过期时间
         loginUser.setExpireTime(loginUser.getLoginTime() + expireTime * MILLIS_MINUTE);
         // 根据uuid将loginUser缓存
         String userKey = getTokenKey(loginUser.getToken());
