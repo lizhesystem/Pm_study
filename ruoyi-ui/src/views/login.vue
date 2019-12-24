@@ -66,8 +66,8 @@
         cookiePassword: '',
         // 提交的表单数据,created先获取,如果能获取到这里就有之前的数据了
         loginForm: {
-          username: 'admin',
-          password: 'admin123',
+          username: 'lz',
+          password: '111111',
           rememberMe: false,
           code: '',
           uuid: ''
@@ -86,6 +86,7 @@
       }
     },
     watch: {
+      // login.vue 中对 $route 进行监听：immediate: true代表在一开始就让他最初绑定的时候就执行，而不是路由变化的时候才执行
       $route: {
         handler: function(route) {
           this.redirect = route.query && route.query.redirect
@@ -138,6 +139,7 @@
               .dispatch('Login', this.loginForm)
               .then(() => {
                 this.loading = false
+                // 登录成功跳转到首页
                 this.$router.push({ path: this.redirect || '/' })
               })
               .catch(() => {

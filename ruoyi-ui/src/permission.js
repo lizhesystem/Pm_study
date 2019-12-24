@@ -18,7 +18,7 @@ router.beforeEach((to, from, next) => {
       NProgress.done()
     } else {
       if (store.getters.roles.length === 0) {
-        // 判断当前用户是否已拉取完user_info信息
+        // 判断当前用户是否已拉取完user_info信息,从store里get数据。
         store.dispatch('GetInfo').then(res => {
           // 拉取user_info
           const roles = res.roles
@@ -53,6 +53,7 @@ router.beforeEach((to, from, next) => {
       // 在免登录白名单，直接进入
       next()
     } else {
+      // 第一次访问经过路由首位，如果没有token的时候,除了
       next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
       NProgress.done()
     }

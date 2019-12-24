@@ -38,7 +38,7 @@ public class SysLoginController {
     private TokenService tokenService;
 
     /**
-     * 登录方法
+     * 首次登录方法
      *
      * @param username 用户名
      * @param password 密码
@@ -48,10 +48,11 @@ public class SysLoginController {
      */
     @PostMapping("/login")
     public AjaxResult login(String username, String password, String code, String uuid) {
-        // 根据自定义异常类封装返回数据
+        // 根据自定义异常类先封装响应成功的对象
         AjaxResult ajax = AjaxResult.success();
-        // 生成令牌
+        // 生成令牌,这里面涉及的内容比较多。
         String token = loginService.login(username, password, code, uuid);
+        // 把token放到响应类里
         ajax.put(Constants.TOKEN, token);
         // 返回token
         return ajax;

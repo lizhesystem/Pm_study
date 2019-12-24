@@ -4,6 +4,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
@@ -20,34 +21,36 @@ import com.ruoyi.framework.security.service.TokenService;
 import com.ruoyi.framework.web.domain.AjaxResult;
 
 /**
- * 自定义退出处理类 返回成功
- * 
+ * 自定义退出处理类 返回成功  需要继承LogoutSuccessHandler，LogoutSuccessHandler接口定义了注销之后的操作方法
+ *
  * @author ruoyi
  */
 @Configuration
-public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler
-{
+public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
+
+    // 处理token的方法集合
     @Autowired
     private TokenService tokenService;
 
     /**
      * 退出处理
-     * 
+     *
      * @return
      */
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-            throws IOException, ServletException
-    {
+            throws IOException, ServletException {
+        // 方法获取token，然后根据token获取redis用户信息对象
         LoginUser loginUser = tokenService.getLoginUser(request);
-        if (StringUtils.isNotNull(loginUser))
-        {
+        if (StringUtils.isNotNull(loginUser)) {
+            // 获取用户名
             String userName = loginUser.getUsername();
-            // 删除用户缓存记录
+            // 获取token,从redis里删除用户token缓存记录
             tokenService.delLoginUser(loginUser.getToken());
             // 记录用户退出日志
             AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, Constants.LOGOUT, "退出成功"));
         }
+        // 把结果以json的格式response方式返回客户端（JSON.toJSONString是个把对象格式化json的工具类fastjson）
         ServletUtils.renderString(response, JSON.toJSONString(AjaxResult.error(HttpStatus.SUCCESS, "退出成功")));
     }
 }

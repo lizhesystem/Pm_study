@@ -39,7 +39,9 @@ const user = {
       return new Promise((resolve, reject) => {
         // 发起请求,这里请求是post,使用params: data方式封装成key=value&xx格式，后端post直接接收字符串
         login(username, password, code, uuid).then(res => {
+          // 在浏览器cookie里设置token,名称是Admin-Token
           setToken(res.token)
+          // token设置到store里
           commit('SET_TOKEN', res.token)
           resolve()
         }).catch(error => {

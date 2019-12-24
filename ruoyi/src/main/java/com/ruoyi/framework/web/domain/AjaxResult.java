@@ -61,7 +61,7 @@ public class AjaxResult extends HashMap<String, Object> {
     }
 
     /**
-     * 返回成功消息
+     * 返回成功消息,重载参数1
      *
      * @return 成功消息
      */
@@ -70,7 +70,7 @@ public class AjaxResult extends HashMap<String, Object> {
     }
 
     /**
-     * 返回成功数据
+     * 返回成功数据,重载参数2
      *
      * @return 成功消息
      */
@@ -79,7 +79,7 @@ public class AjaxResult extends HashMap<String, Object> {
     }
 
     /**
-     * 返回成功消息
+     * 返回成功消息.重载参数3
      *
      * @param msg 返回内容
      * @return 成功消息
@@ -96,6 +96,7 @@ public class AjaxResult extends HashMap<String, Object> {
      * @return 成功消息
      */
     public static AjaxResult success(String msg, Object data) {
+        // 根据前面的3个重载方法，new对象返回
         return new AjaxResult(HttpStatus.SUCCESS, msg, data);
     }
 
