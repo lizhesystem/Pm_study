@@ -67,9 +67,9 @@ public class SysLoginController {
     public AjaxResult getInfo() {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         SysUser user = loginUser.getUser();
-        // 角色集合
+        // 角色集合,得到角色的key set集合
         Set<String> roles = permissionService.getRolePermission(user);
-        // 权限集合
+        // 权限集合，得到菜单表里权限集合system:user:list
         Set<String> permissions = permissionService.getMenuPermission(user);
         AjaxResult ajax = AjaxResult.success();
         ajax.put("user", user);

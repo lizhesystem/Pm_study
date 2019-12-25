@@ -37,9 +37,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         if (StringUtils.isNotNull(loginUser) && StringUtils.isNull(SecurityUtils.getAuthentication())) {
             // 重置redis里的token令牌
             tokenService.verifyToken(loginUser);
-            // 根据用户名密码验证是否正确，如果校验通过放行
+            // 根据用户名密码验证是否正确，如果校验通过放行UsernamePasswordAuthenticationToken是Security验证账号密码的工具类
+            // 然后将验证信息放入SecurityContextHolder中
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            // 认证成功存储认证信息到上下文
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
         chain.doFilter(request, response);

@@ -57,6 +57,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     @Override
     public Set<String> selectMenuPermsByUserId(Long userId) {
+        // 根据用户查询该用户所属角色的菜单 system:user:list
         List<String> perms = menuMapper.selectMenuPermsByUserId(userId);
         Set<String> permsSet = new HashSet<>();
         for (String perm : perms) {

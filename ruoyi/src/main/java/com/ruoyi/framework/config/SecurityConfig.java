@@ -131,7 +131,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 身份认证接口
+     * 身份认证接口,主要负责登录处理
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
