@@ -111,9 +111,13 @@ public class SysMenuServiceImpl implements ISysMenuService {
             router.setComponent(StringUtils.isEmpty(menu.getComponent()) ? "Layout" : menu.getComponent());
             router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon()));
             List<SysMenu> cMenus = menu.getChildren();
+            //children有值并且是menu的类型是M的
             if (!cMenus.isEmpty() && cMenus.size() > 0 && "M".equals(menu.getMenuType())) {
+                // 代表有子菜单
                 router.setAlwaysShow(true);
+                // 不重定向，以为是M类型
                 router.setRedirect("noRedirect");
+                // 递归生成子路由的RouterVo对象
                 router.setChildren(buildMenus(cMenus));
             }
             routers.add(router);

@@ -1,13 +1,14 @@
 <template>
   <div class="navbar">
+    <!--隐藏显示按钮-->
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
+    <!--面包屑-->
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />
-        
+
         <el-tooltip content="下载源码" effect="dark" placement="bottom">
           <ruo-yi id="ruoyi" class="right-menu-item hover-effect" />
         </el-tooltip>
@@ -19,9 +20,10 @@
         </el-tooltip>
 
       </template>
-
+      <!--个人中心下拉-->
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
+          <!--头像-->
           <img :src="avatar" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>

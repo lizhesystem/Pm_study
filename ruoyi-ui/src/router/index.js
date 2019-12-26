@@ -27,6 +27,7 @@ import Layout from '@/layout'
 // 公共路由
 export const constantRoutes = [
   {
+    // hidden: true不展示
     path: '/redirect',
     component: Layout,
     hidden: true,
@@ -53,6 +54,7 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    // 首页跳转这个,空的路由或者index都到layout
     path: '',
     component: Layout,
     redirect: 'index',

@@ -5,6 +5,7 @@ const state = {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false
   },
+  // 写死是desktop 没有动态获取
   device: 'desktop',
   size: Cookies.get('size') || 'medium'
 }
