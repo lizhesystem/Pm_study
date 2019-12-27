@@ -126,13 +126,14 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:role:edit']"
           >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-circle-check"
-            @click="handleDataScope(scope.row)"
-            v-hasPermi="['system:role:edit']"
-          >数据权限</el-button>
+          <!--数据权限暂时不用屏蔽-->
+          <!--<el-button-->
+          <!--  size="mini"-->
+          <!--  type="text"-->
+          <!--  icon="el-icon-circle-check"-->
+          <!--  @click="handleDataScope(scope.row)"-->
+          <!--  v-hasPermi="['system:role:edit']"-->
+          <!--&gt;数据权限</el-button>-->
           <el-button
             size="mini"
             type="text"
@@ -193,7 +194,7 @@
       </div>
     </el-dialog>
 
-    <!-- 分配角色数据权限对话框 -->
+    <!-- 分配角色数据权限对话框||屏蔽 -->
     <el-dialog :title="title" :visible.sync="openDataScope" width="500px">
       <el-form :model="form" label-width="80px">
         <el-form-item label="角色名称">
@@ -209,6 +210,7 @@
               :key="item.value"
               :label="item.label"
               :value="item.value"
+              :disabled="true"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -268,23 +270,24 @@ export default {
         {
           value: "1",
           label: "全部数据权限"
-        },
-        {
-          value: "2",
-          label: "自定数据权限"
-        },
-        {
-          value: "3",
-          label: "本部门数据权限"
-        },
-        {
-          value: "4",
-          label: "本部门及以下数据权限"
-        },
-        {
-          value: "5",
-          label: "仅本人数据权限"
         }
+        // ,
+        // {
+        //   value: "2",
+        //   label: "自定数据权限"
+        // },
+        // {
+        //   value: "3",
+        //   label: "本部门数据权限"
+        // },
+        // {
+        //   value: "4",
+        //   label: "本部门及以下数据权限"
+        // },
+        // {
+        //   value: "5",
+        //   label: "仅本人数据权限"
+        // }
       ],
       // 菜单列表
       menuOptions: [],
