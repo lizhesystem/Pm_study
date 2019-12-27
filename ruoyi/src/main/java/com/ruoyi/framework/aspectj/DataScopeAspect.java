@@ -33,7 +33,7 @@ public class DataScopeAspect {
     public static final String DATA_SCOPE_ALL = "1";
 
     /**
-     * 自定数据权限
+     * 自定数据权限,设置角色对部门的权限，当前角色下角色能查哪个部门的数据
      */
     public static final String DATA_SCOPE_CUSTOM = "2";
 

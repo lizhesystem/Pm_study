@@ -131,7 +131,7 @@
             >导出</el-button>
           </el-col>
         </el-row>
-
+        <!--用户信息查询列表-->
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="40" align="center" />
           <el-table-column label="用户编号" align="center" prop="userId" />
