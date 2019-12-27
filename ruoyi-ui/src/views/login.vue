@@ -66,8 +66,8 @@
         cookiePassword: '',
         // 提交的表单数据,created先获取,如果能获取到这里就有之前的数据了
         loginForm: {
-          username: 'lz',
-          password: '111111',
+          username: 'admin',
+          password: 'admin123',
           rememberMe: false,
           code: '',
           uuid: ''
