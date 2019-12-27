@@ -1,32 +1,32 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="20">
+    <el-row :gutter="24">
       <!--部门数据-->
-      <el-col :span="4" :xs="24">
-        <div class="head-container">
-          <el-input
-            v-model="deptName"
-            placeholder="请输入部门名称"
-            clearable
-            size="small"
-            prefix-icon="el-icon-search"
-            style="margin-bottom: 20px"
-          />
-        </div>
-        <div class="head-container">
-          <el-tree
-            :data="deptOptions"
-            :props="defaultProps"
-            :expand-on-click-node="false"
-            :filter-node-method="filterNode"
-            ref="tree"
-            default-expand-all
-            @node-click="handleNodeClick"
-          />
-        </div>
-      </el-col>
+      <!--<el-col :span="4" :xs="24">-->
+      <!--  <div class="head-container">-->
+      <!--    <el-input-->
+      <!--      v-model="deptName"-->
+      <!--      placeholder="请输入部门名称"-->
+      <!--      clearable-->
+      <!--      size="small"-->
+      <!--      prefix-icon="el-icon-search"-->
+      <!--      style="margin-bottom: 20px"-->
+      <!--    />-->
+      <!--  </div>-->
+      <!--  <div class="head-container">-->
+      <!--    <el-tree-->
+      <!--      :data="deptOptions"-->
+      <!--      :props="defaultProps"-->
+      <!--      :expand-on-click-node="false"-->
+      <!--      :filter-node-method="filterNode"-->
+      <!--      ref="tree"-->
+      <!--      default-expand-all-->
+      <!--      @node-click="handleNodeClick"-->
+      <!--    />-->
+      <!--  </div>-->
+      <!--</el-col>-->
       <!--用户数据-->
-      <el-col :span="20" :xs="24">
+      <el-col :span="24" :xs="24">
         <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
           <el-form-item label="用户名称" prop="userName">
             <el-input
@@ -94,13 +94,31 @@
           </el-col>
           <el-col :span="1.5">
             <el-button
-              type="success"
+              type="primary"
               icon="el-icon-edit"
               size="mini"
               :disabled="single"
               @click="handleUpdate"
               v-hasPermi="['system:user:edit']"
             >修改</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              icon="el-icon-upload2"
+              size="mini"
+              @click="handleImport"
+              v-hasPermi="['system:user:import']"
+            >导入</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              icon="el-icon-download"
+              size="mini"
+              @click="handleExport"
+              v-hasPermi="['system:user:export']"
+            >导出</el-button>
           </el-col>
           <el-col :span="1.5">
             <el-button
@@ -111,24 +129,6 @@
               @click="handleDelete"
               v-hasPermi="['system:user:remove']"
             >删除</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button
-              type="info"
-              icon="el-icon-upload2"
-              size="mini"
-              @click="handleImport"
-              v-hasPermi="['system:user:import']"
-            >导入</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button
-              type="warning"
-              icon="el-icon-download"
-              size="mini"
-              @click="handleExport"
-              v-hasPermi="['system:user:export']"
-            >导出</el-button>
           </el-col>
         </el-row>
         <!--用户信息查询列表-->
