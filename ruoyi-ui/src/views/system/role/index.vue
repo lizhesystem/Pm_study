@@ -67,13 +67,22 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="success"
+          type="primary"
           icon="el-icon-edit"
           size="mini"
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['system:role:edit']"
         >修改</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          icon="el-icon-upload2"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['system:post:export']"
+        >导出</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -84,15 +93,6 @@
           @click="handleDelete"
           v-hasPermi="['system:role:remove']"
         >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:post:export']"
-        >导出</el-button>
       </el-col>
     </el-row>
 

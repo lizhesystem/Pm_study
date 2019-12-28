@@ -67,13 +67,22 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="success"
+          type="primary"
           icon="el-icon-edit"
           size="mini"
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['system:dict:edit']"
         >修改</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          icon="el-icon-upload2"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['system:dict:export']"
+        >导出</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -85,15 +94,7 @@
           v-hasPermi="['system:dict:remove']"
         >删除</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:dict:export']"
-        >导出</el-button>
-      </el-col>
+
     </el-row>
 
     <el-table v-loading="loading" :data="typeList" @selection-change="handleSelectionChange">

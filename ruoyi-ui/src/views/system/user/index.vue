@@ -105,7 +105,7 @@
           <el-col :span="1.5">
             <el-button
               type="primary"
-              icon="el-icon-upload2"
+              icon="el-icon-download"
               size="mini"
               @click="handleImport"
               v-hasPermi="['system:user:import']"
@@ -114,7 +114,7 @@
           <el-col :span="1.5">
             <el-button
               type="primary"
-              icon="el-icon-download"
+              icon="el-icon-upload2"
               size="mini"
               @click="handleExport"
               v-hasPermi="['system:user:export']"
@@ -243,31 +243,19 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="状态">
-              <el-radio-group v-model="form.status">
-                <el-radio
-                  v-for="dict in statusOptions"
-                  :key="dict.dictValue"
-                  :label="dict.dictValue"
-                >{{dict.dictLabel}}</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="岗位">
-              <el-select v-model="form.postIds" multiple placeholder="请选择">
-                <el-option
-                  v-for="item in postOptions"
-                  :key="item.postId"
-                  :label="item.postName"
-                  :value="item.postId"
-                  :disabled="item.status == 1"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
+          <!--<el-col :span="12">-->
+          <!--  <el-form-item label="岗位">-->
+          <!--    <el-select v-model="form.postIds" multiple placeholder="请选择">-->
+          <!--      <el-option-->
+          <!--        v-for="item in postOptions"-->
+          <!--        :key="item.postId"-->
+          <!--        :label="item.postName"-->
+          <!--        :value="item.postId"-->
+          <!--        :disabled="item.status == 1"-->
+          <!--      ></el-option>-->
+          <!--    </el-select>-->
+          <!--  </el-form-item>-->
+          <!--</el-col>-->
           <el-col :span="12">
             <el-form-item label="角色">
               <el-select v-model="form.roleIds" multiple placeholder="请选择">
@@ -279,6 +267,17 @@
                   :disabled="item.status == 1"
                 ></el-option>
               </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="状态">
+              <el-radio-group v-model="form.status">
+                <el-radio
+                  v-for="dict in statusOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictValue"
+                >{{dict.dictLabel}}</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -456,6 +455,7 @@ export default {
     getList() {
       this.loading = true;
       listUser(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+          debugger
           this.userList = response.rows;
           this.total = response.total;
           this.loading = false;

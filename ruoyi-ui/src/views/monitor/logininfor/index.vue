@@ -77,8 +77,8 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="warning"
-          icon="el-icon-download"
+          type="primary"
+          icon="el-icon-upload2"
           size="mini"
           @click="handleExport"
           v-hasPermi="['system:logininfor:export']"

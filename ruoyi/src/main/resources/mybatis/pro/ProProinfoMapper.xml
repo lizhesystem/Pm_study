@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.ProProinfoMapper">
+    
+    <resultMap type="ProProinfo" id="ProProinfoResult">
+        <result property="proId"    column="pro_id"    />
+        <result property="proNum"    column="pro_num"    />
+        <result property="proName"    column="pro_name"    />
+        <result property="operator"    column="operator"    />
+        <result property="tradeMode"    column="trade_mode"    />
+        <result property="bankId"    column="bank_id"    />
+        <result property="bankName"    column="bank_name"    />
+        <result property="custname"    column="custname"    />
+        <result property="custphone"    column="custphone"    />
+        <result property="custemail"    column="custemail"    />
+        <result property="proManager"    column="pro_manager"    />
+        <result property="insetallId"    column="insetall_id"    />
+        <result property="trainId"    column="train_id"    />
+        <result property="acceptanceStatus"    column="acceptance_status"    />
+        <result property="proStatus"    column="pro_status"    />
+        <result property="insertTime"    column="insert_time"    />
+        <result property="trainTime"    column="train_time"    />
+        <result property="businessTime"    column="business_time"    />
+        <result property="terminationTime"    column="termination_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectProProinfoVo">
+        select pro_id, pro_num, pro_name, operator, trade_mode, bank_id, bank_name, custname, custphone, custemail, pro_manager, insetall_id, train_id, acceptance_status, pro_status, insert_time, train_time, business_time, termination_time, create_by, create_time, update_by, update_time, remark from pro_proinfo
+    </sql>
+
+    <select id="selectProProinfoList" parameterType="ProProinfo" resultMap="ProProinfoResult">
+        <include refid="selectProProinfoVo"/>
+        <where>  
+            <if test="proNum != null  and proNum != ''"> and pro_num = #{proNum}</if>
+            <if test="proName != null  and proName != ''"> and pro_name like concat('%', #{proName}, '%')</if>
+            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
+            <if test="tradeMode != null  and tradeMode != ''"> and trade_mode = #{tradeMode}</if>
+            <if test="bankId != null  and bankId != ''"> and bank_id = #{bankId}</if>
+            <if test="bankName != null  and bankName != ''"> and bank_name like concat('%', #{bankName}, '%')</if>
+            <if test="custname != null  and custname != ''"> and custname like concat('%', #{custname}, '%')</if>
+            <if test="custphone != null  and custphone != ''"> and custphone = #{custphone}</if>
+            <if test="custemail != null  and custemail != ''"> and custemail = #{custemail}</if>
+            <if test="proManager != null  and proManager != ''"> and pro_manager = #{proManager}</if>
+            <if test="insetallId != null "> and insetall_id = #{insetallId}</if>
+            <if test="trainId != null "> and train_id = #{trainId}</if>
+            <if test="acceptanceStatus != null  and acceptanceStatus != ''"> and acceptance_status = #{acceptanceStatus}</if>
+            <if test="proStatus != null  and proStatus != ''"> and pro_status = #{proStatus}</if>
+            <if test="insertTime != null "> and insert_time = #{insertTime}</if>
+            <if test="trainTime != null "> and train_time = #{trainTime}</if>
+            <if test="businessTime != null "> and business_time = #{businessTime}</if>
+            <if test="terminationTime != null "> and termination_time = #{terminationTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectProProinfoById" parameterType="Long" resultMap="ProProinfoResult">
+        <include refid="selectProProinfoVo"/>
+        where pro_id = #{proId}
+    </select>
+        
+    <insert id="insertProProinfo" parameterType="ProProinfo" useGeneratedKeys="true" keyProperty="proId">
+        insert into pro_proinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="proNum != null  and proNum != ''">pro_num,</if>
+            <if test="proName != null  and proName != ''">pro_name,</if>
+            <if test="operator != null  and operator != ''">operator,</if>
+            <if test="tradeMode != null  and tradeMode != ''">trade_mode,</if>
+            <if test="bankId != null  and bankId != ''">bank_id,</if>
+            <if test="bankName != null  and bankName != ''">bank_name,</if>
+            <if test="custname != null  and custname != ''">custname,</if>
+            <if test="custphone != null  and custphone != ''">custphone,</if>
+            <if test="custemail != null  and custemail != ''">custemail,</if>
+            <if test="proManager != null  and proManager != ''">pro_manager,</if>
+            <if test="insetallId != null ">insetall_id,</if>
+            <if test="trainId != null ">train_id,</if>
+            <if test="acceptanceStatus != null  and acceptanceStatus != ''">acceptance_status,</if>
+            <if test="proStatus != null  and proStatus != ''">pro_status,</if>
+            <if test="insertTime != null ">insert_time,</if>
+            <if test="trainTime != null ">train_time,</if>
+            <if test="businessTime != null ">business_time,</if>
+            <if test="terminationTime != null ">termination_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="proNum != null  and proNum != ''">#{proNum},</if>
+            <if test="proName != null  and proName != ''">#{proName},</if>
+            <if test="operator != null  and operator != ''">#{operator},</if>
+            <if test="tradeMode != null  and tradeMode != ''">#{tradeMode},</if>
+            <if test="bankId != null  and bankId != ''">#{bankId},</if>
+            <if test="bankName != null  and bankName != ''">#{bankName},</if>
+            <if test="custname != null  and custname != ''">#{custname},</if>
+            <if test="custphone != null  and custphone != ''">#{custphone},</if>
+            <if test="custemail != null  and custemail != ''">#{custemail},</if>
+            <if test="proManager != null  and proManager != ''">#{proManager},</if>
+            <if test="insetallId != null ">#{insetallId},</if>
+            <if test="trainId != null ">#{trainId},</if>
+            <if test="acceptanceStatus != null  and acceptanceStatus != ''">#{acceptanceStatus},</if>
+            <if test="proStatus != null  and proStatus != ''">#{proStatus},</if>
+            <if test="insertTime != null ">#{insertTime},</if>
+            <if test="trainTime != null ">#{trainTime},</if>
+            <if test="businessTime != null ">#{businessTime},</if>
+            <if test="terminationTime != null ">#{terminationTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProProinfo" parameterType="ProProinfo">
+        update pro_proinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="proNum != null  and proNum != ''">pro_num = #{proNum},</if>
+            <if test="proName != null  and proName != ''">pro_name = #{proName},</if>
+            <if test="operator != null  and operator != ''">operator = #{operator},</if>
+            <if test="tradeMode != null  and tradeMode != ''">trade_mode = #{tradeMode},</if>
+            <if test="bankId != null  and bankId != ''">bank_id = #{bankId},</if>
+            <if test="bankName != null  and bankName != ''">bank_name = #{bankName},</if>
+            <if test="custname != null  and custname != ''">custname = #{custname},</if>
+            <if test="custphone != null  and custphone != ''">custphone = #{custphone},</if>
+            <if test="custemail != null  and custemail != ''">custemail = #{custemail},</if>
+            <if test="proManager != null  and proManager != ''">pro_manager = #{proManager},</if>
+            <if test="insetallId != null ">insetall_id = #{insetallId},</if>
+            <if test="trainId != null ">train_id = #{trainId},</if>
+            <if test="acceptanceStatus != null  and acceptanceStatus != ''">acceptance_status = #{acceptanceStatus},</if>
+            <if test="proStatus != null  and proStatus != ''">pro_status = #{proStatus},</if>
+            <if test="insertTime != null ">insert_time = #{insertTime},</if>
+            <if test="trainTime != null ">train_time = #{trainTime},</if>
+            <if test="businessTime != null ">business_time = #{businessTime},</if>
+            <if test="terminationTime != null ">termination_time = #{terminationTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where pro_id = #{proId}
+    </update>
+
+    <delete id="deleteProProinfoById" parameterType="Long">
+        delete from pro_proinfo where pro_id = #{proId}
+    </delete>
+
+    <delete id="deleteProProinfoByIds" parameterType="String">
+        delete from pro_proinfo where pro_id in 
+        <foreach item="proId" collection="array" open="(" separator="," close=")">
+            #{proId}
+        </foreach>
+    </delete>
+    
+</mapper>
