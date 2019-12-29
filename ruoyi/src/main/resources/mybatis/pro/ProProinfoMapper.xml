@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.project.system.mapper.ProProinfoMapper">
-    
-    <resultMap type="ProProinfo" id="ProProinfoResult">
+<mapper namespace="com.ruoyi.project.pro.mapper.ProProinfoMapper">
+
+    <resultMap type="ProInfo" id="ProProinfoResult">
         <result property="proId"    column="pro_id"    />
         <result property="proNum"    column="pro_num"    />
         <result property="proName"    column="pro_name"    />
@@ -32,12 +32,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectProProinfoVo">
-        select pro_id, pro_num, pro_name, operator, trade_mode, bank_id, bank_name, custname, custphone, custemail, pro_manager, insetall_id, train_id, acceptance_status, pro_status, insert_time, train_time, business_time, termination_time, create_by, create_time, update_by, update_time, remark from pro_proinfo
+        select pro_id, pro_num, pro_name, operator, trade_mode, bank_id, bank_name, custname, custphone,
+        custemail, pro_manager, insetall_id, train_id, acceptance_status, pro_status, insert_time, train_time,
+         business_time, termination_time, create_by, create_time, update_by, update_time, remark
+        from pro_proinfo
     </sql>
 
-    <select id="selectProProinfoList" parameterType="ProProinfo" resultMap="ProProinfoResult">
+    <select id="selectProProinfoList" parameterType="ProInfo" resultMap="ProProinfoResult">
         <include refid="selectProProinfoVo"/>
-        <where>  
+        <where>
             <if test="proNum != null  and proNum != ''"> and pro_num = #{proNum}</if>
             <if test="proName != null  and proName != ''"> and pro_name like concat('%', #{proName}, '%')</if>
             <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
@@ -58,13 +61,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="terminationTime != null "> and termination_time = #{terminationTime}</if>
         </where>
     </select>
-    
+
     <select id="selectProProinfoById" parameterType="Long" resultMap="ProProinfoResult">
         <include refid="selectProProinfoVo"/>
         where pro_id = #{proId}
     </select>
-        
-    <insert id="insertProProinfo" parameterType="ProProinfo" useGeneratedKeys="true" keyProperty="proId">
+
+    <insert id="insertProProinfo" parameterType="ProInfo" useGeneratedKeys="true" keyProperty="proId">
         insert into pro_proinfo
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="proNum != null  and proNum != ''">pro_num,</if>
@@ -118,7 +121,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateProProinfo" parameterType="ProProinfo">
+    <update id="updateProProinfo" parameterType="ProInfo">
         update pro_proinfo
         <trim prefix="SET" suffixOverrides=",">
             <if test="proNum != null  and proNum != ''">pro_num = #{proNum},</if>
@@ -153,10 +156,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteProProinfoByIds" parameterType="String">
-        delete from pro_proinfo where pro_id in 
+        delete from pro_proinfo where pro_id in
         <foreach item="proId" collection="array" open="(" separator="," close=")">
             #{proId}
         </foreach>
     </delete>
-    
+
 </mapper>

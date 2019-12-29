@@ -13,7 +13,7 @@ import java.util.Date;
  * @author ruoyi
  * @date 2019-12-28
  */
-public class ProProinfo extends BaseEntity {
+public class ProInfo extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**

@@ -2,7 +2,7 @@ package com.ruoyi.project.pro.controller;
 
 import java.util.List;
 
-import com.ruoyi.project.pro.domain.ProProinfo;
+import com.ruoyi.project.pro.domain.ProInfo;
 import com.ruoyi.project.pro.service.IProProinfoService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,42 +24,43 @@ import com.ruoyi.framework.web.page.TableDataInfo;
 /**
  * 项目列Controller
  *
- * @author ruoyi
+ * @author lizhe
  * @date 2019-12-28
  */
 @RestController
-@RequestMapping("/system/proinfo")
-public class ProProinfoController extends BaseController {
+@RequestMapping("/pro/proinfo")
+public class ProProInfoController extends BaseController {
+
     @Autowired
     private IProProinfoService proProinfoService;
 
     /**
      * 查询项目列列表
      */
-    @PreAuthorize("@ss.hasPermi('system:proinfo:list')")
+    @PreAuthorize("@ss.hasPermi('pro:proinfo:list')")
     @GetMapping("/list")
-    public TableDataInfo list(ProProinfo proProinfo) {
+    public TableDataInfo list(ProInfo proInfo) {
         startPage();
-        List<ProProinfo> list = proProinfoService.selectProProinfoList(proProinfo);
+        List<ProInfo> list = proProinfoService.selectProProinfoList(proInfo);
         return getDataTable(list);
     }
 
     /**
      * 导出项目列列表
      */
-    @PreAuthorize("@ss.hasPermi('system:proinfo:export')")
+    @PreAuthorize("@ss.hasPermi('pro:proinfo:export')")
     @Log(title = "项目列", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
-    public AjaxResult export(ProProinfo proProinfo) {
-        List<ProProinfo> list = proProinfoService.selectProProinfoList(proProinfo);
-        ExcelUtil<ProProinfo> util = new ExcelUtil<ProProinfo>(ProProinfo.class);
+    public AjaxResult export(ProInfo proInfo) {
+        List<ProInfo> list = proProinfoService.selectProProinfoList(proInfo);
+        ExcelUtil<ProInfo> util = new ExcelUtil<ProInfo>(ProInfo.class);
         return util.exportExcel(list, "proinfo");
     }
 
     /**
      * 获取项目列详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:proinfo:query')")
+    @PreAuthorize("@ss.hasPermi('pro:proinfo:query')")
     @GetMapping(value = "/{proId}")
     public AjaxResult getInfo(@PathVariable("proId") Long proId) {
         return AjaxResult.success(proProinfoService.selectProProinfoById(proId));
@@ -68,27 +69,27 @@ public class ProProinfoController extends BaseController {
     /**
      * 新增项目列
      */
-    @PreAuthorize("@ss.hasPermi('system:proinfo:add')")
+    @PreAuthorize("@ss.hasPermi('pro:proinfo:add')")
     @Log(title = "项目列", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody ProProinfo proProinfo) {
-        return toAjax(proProinfoService.insertProProinfo(proProinfo));
+    public AjaxResult add(@RequestBody ProInfo proInfo) {
+        return toAjax(proProinfoService.insertProProinfo(proInfo));
     }
 
     /**
      * 修改项目列
      */
-    @PreAuthorize("@ss.hasPermi('system:proinfo:edit')")
+    @PreAuthorize("@ss.hasPermi('pro:proinfo:edit')")
     @Log(title = "项目列", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody ProProinfo proProinfo) {
-        return toAjax(proProinfoService.updateProProinfo(proProinfo));
+    public AjaxResult edit(@RequestBody ProInfo proInfo) {
+        return toAjax(proProinfoService.updateProProinfo(proInfo));
     }
 
     /**
      * 删除项目列
      */
-    @PreAuthorize("@ss.hasPermi('system:proinfo:remove')")
+    @PreAuthorize("@ss.hasPermi('pro:proinfo:remove')")
     @Log(title = "项目列", businessType = BusinessType.DELETE)
     @DeleteMapping("/{proIds}")
     public AjaxResult remove(@PathVariable Long[] proIds) {

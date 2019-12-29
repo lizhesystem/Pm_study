@@ -1,11 +1,12 @@
 package com.ruoyi.project.pro.service.impl;
 
 import java.util.List;
+
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.pro.mapper.ProProinfoMapper;
-import com.ruoyi.project.pro.domain.ProProinfo;
+import com.ruoyi.project.pro.domain.ProInfo;
 import com.ruoyi.project.pro.service.IProProinfoService;
 
 /**
@@ -15,8 +16,7 @@ import com.ruoyi.project.pro.service.IProProinfoService;
  * @date 2019-12-28
  */
 @Service
-public class ProProinfoServiceImpl implements IProProinfoService
-{
+public class ProProinfoServiceImpl implements IProProinfoService {
     @Autowired
     private ProProinfoMapper proProinfoMapper;
 
@@ -27,47 +27,43 @@ public class ProProinfoServiceImpl implements IProProinfoService
      * @return 项目列
      */
     @Override
-    public ProProinfo selectProProinfoById(Long proId)
-    {
+    public ProInfo selectProProinfoById(Long proId) {
         return proProinfoMapper.selectProProinfoById(proId);
     }
 
     /**
      * 查询项目列列表
      *
-     * @param proProinfo 项目列
+     * @param proInfo 项目列
      * @return 项目列
      */
     @Override
-    public List<ProProinfo> selectProProinfoList(ProProinfo proProinfo)
-    {
-        return proProinfoMapper.selectProProinfoList(proProinfo);
+    public List<ProInfo> selectProProinfoList(ProInfo proInfo) {
+        return proProinfoMapper.selectProProinfoList(proInfo);
     }
 
     /**
      * 新增项目列
      *
-     * @param proProinfo 项目列
+     * @param proInfo 项目列
      * @return 结果
      */
     @Override
-    public int insertProProinfo(ProProinfo proProinfo)
-    {
-        proProinfo.setCreateTime(DateUtils.getNowDate());
-        return proProinfoMapper.insertProProinfo(proProinfo);
+    public int insertProProinfo(ProInfo proInfo) {
+        proInfo.setCreateTime(DateUtils.getNowDate());
+        return proProinfoMapper.insertProProinfo(proInfo);
     }
 
     /**
      * 修改项目列
      *
-     * @param proProinfo 项目列
+     * @param proInfo 项目列
      * @return 结果
      */
     @Override
-    public int updateProProinfo(ProProinfo proProinfo)
-    {
-        proProinfo.setUpdateTime(DateUtils.getNowDate());
-        return proProinfoMapper.updateProProinfo(proProinfo);
+    public int updateProProinfo(ProInfo proInfo) {
+        proInfo.setUpdateTime(DateUtils.getNowDate());
+        return proProinfoMapper.updateProProinfo(proInfo);
     }
 
     /**
@@ -77,8 +73,7 @@ public class ProProinfoServiceImpl implements IProProinfoService
      * @return 结果
      */
     @Override
-    public int deleteProProinfoByIds(Long[] proIds)
-    {
+    public int deleteProProinfoByIds(Long[] proIds) {
         return proProinfoMapper.deleteProProinfoByIds(proIds);
     }
 
@@ -89,8 +84,7 @@ public class ProProinfoServiceImpl implements IProProinfoService
      * @return 结果
      */
     @Override
-    public int deleteProProinfoById(Long proId)
-    {
+    public int deleteProProinfoById(Long proId) {
         return proProinfoMapper.deleteProProinfoById(proId);
     }
 }

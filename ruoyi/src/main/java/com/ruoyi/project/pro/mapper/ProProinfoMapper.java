@@ -1,6 +1,6 @@
 package com.ruoyi.project.pro.mapper;
 
-import com.ruoyi.project.pro.domain.ProProinfo;
+import com.ruoyi.project.pro.domain.ProInfo;
 
 import java.util.List;
 
@@ -17,31 +17,31 @@ public interface ProProinfoMapper {
      * @param proId 项目列ID
      * @return 项目列
      */
-    public ProProinfo selectProProinfoById(Long proId);
+    public ProInfo selectProProinfoById(Long proId);
 
     /**
      * 查询项目列列表
      *
-     * @param proProinfo 项目列
+     * @param proInfo 项目列
      * @return 项目列集合
      */
-    public List<ProProinfo> selectProProinfoList(ProProinfo proProinfo);
+    public List<ProInfo> selectProProinfoList(ProInfo proInfo);
 
     /**
      * 新增项目列
      *
-     * @param proProinfo 项目列
+     * @param proInfo 项目列
      * @return 结果
      */
-    public int insertProProinfo(ProProinfo proProinfo);
+    public int insertProProinfo(ProInfo proInfo);
 
     /**
      * 修改项目列
      *
-     * @param proProinfo 项目列
+     * @param proInfo 项目列
      * @return 结果
      */
-    public int updateProProinfo(ProProinfo proProinfo);
+    public int updateProProinfo(ProInfo proInfo);
 
     /**
      * 删除项目列
