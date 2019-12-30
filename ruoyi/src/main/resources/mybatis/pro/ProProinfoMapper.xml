@@ -11,16 +11,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="operator"    column="operator"    />
         <result property="tradeMode"    column="trade_mode"    />
         <result property="bankId"       column="bank_id"    />
-        <result property="workId"       column="work_id"    />
+        <result property="workName"       column="work_name"    />
         <result property="custname"     column="custname"    />
         <result property="custphone"    column="custphone"    />
         <result property="custemail"    column="custemail"    />
         <result property="proManager"    column="pro_manager"    />
-        <result property="insetallId"    column="insetall_id"    />
-        <result property="trainId"       column="train_id"    />
+        <result property="insetallName"    column="insetall_name"    />
+        <result property="trainName"       column="train_name"    />
         <result property="acceptanceStatus"    column="acceptance_status"    />
         <result property="proStatus"    column="pro_status"    />
-        <result property="insertTime"    column="insert_time"    />
+        <result property="insetallTime"    column="insert_time"    />
         <result property="trainTime"    column="train_time"    />
         <result property="businessTime"    column="business_time"    />
         <result property="terminationTime"    column="termination_time"    />
@@ -48,11 +48,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="custphone != null  and custphone != ''"> and custphone = #{custphone}</if>
             <if test="custemail != null  and custemail != ''"> and custemail = #{custemail}</if>
             <if test="proManager != null  and proManager != ''"> and pro_manager = #{proManager}</if>
-            <if test="insetallId != null "> and insetall_id = #{insetallId}</if>
-            <if test="trainId != null "> and train_id = #{trainId}</if>
+            <if test="insetallName != null "> and insetall_name = #{insetallName}</if>
+            <if test="trainName != null "> and train_name = #{trainName}</if>
             <if test="acceptanceStatus != null  and acceptanceStatus != ''"> and acceptance_status = #{acceptanceStatus}</if>
             <if test="proStatus != null  and proStatus != ''"> and pro_status = #{proStatus}</if>
-            <if test="insertTime != null "> and insert_time = #{insertTime}</if>
+            <if test="insetallTime != null "> and insetall_time = #{insetallTime}</if>
             <if test="trainTime != null "> and train_time = #{trainTime}</if>
             <if test="businessTime != null "> and business_time = #{businessTime}</if>
             <if test="terminationTime != null "> and termination_time = #{terminationTime}</if>
@@ -76,11 +76,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="custphone != null  and custphone != ''">custphone,</if>
             <if test="custemail != null  and custemail != ''">custemail,</if>
             <if test="proManager != null  and proManager != ''">pro_manager,</if>
-            <if test="insetallId != null ">insetall_id,</if>
-            <if test="trainId != null ">train_id,</if>
+            <if test="insetallName != null ">insetall_name,</if>
+            <if test="trainName != null ">train_name,</if>
             <if test="acceptanceStatus != null  and acceptanceStatus != ''">acceptance_status,</if>
             <if test="proStatus != null  and proStatus != ''">pro_status,</if>
-            <if test="insertTime != null ">insert_time,</if>
+            <if test="insetallTime != null ">insetall_time,</if>
             <if test="trainTime != null ">train_time,</if>
             <if test="businessTime != null ">business_time,</if>
             <if test="terminationTime != null ">termination_time,</if>
@@ -100,11 +100,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="custphone != null  and custphone != ''">#{custphone},</if>
             <if test="custemail != null  and custemail != ''">#{custemail},</if>
             <if test="proManager != null  and proManager != ''">#{proManager},</if>
-            <if test="insetallId != null ">#{insetallId},</if>
-            <if test="trainId != null ">#{trainId},</if>
+            <if test="insetallName != null ">insetall_name,</if>
+            <if test="trainName != null ">train_name,</if>
             <if test="acceptanceStatus != null  and acceptanceStatus != ''">#{acceptanceStatus},</if>
             <if test="proStatus != null  and proStatus != ''">#{proStatus},</if>
-            <if test="insertTime != null ">#{insertTime},</if>
+            <if test="insetallTime != null ">#{insetallTime},</if>
             <if test="trainTime != null ">#{trainTime},</if>
             <if test="businessTime != null ">#{businessTime},</if>
             <if test="terminationTime != null ">#{terminationTime},</if>
@@ -128,11 +128,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="custphone != null  and custphone != ''">custphone = #{custphone},</if>
             <if test="custemail != null  and custemail != ''">custemail = #{custemail},</if>
             <if test="proManager != null  and proManager != ''">pro_manager = #{proManager},</if>
-            <if test="insetallId != null ">insetall_id = #{insetallId},</if>
-            <if test="trainId != null ">train_id = #{trainId},</if>
+            <if test="insetallName != null "> and insetall_name = #{insetallName}</if>
+            <if test="trainName != null "> and train_name = #{trainName}</if>
             <if test="acceptanceStatus != null  and acceptanceStatus != ''">acceptance_status = #{acceptanceStatus},</if>
             <if test="proStatus != null  and proStatus != ''">pro_status = #{proStatus},</if>
-            <if test="insertTime != null ">insert_time = #{insertTime},</if>
+            <if test="insetallTime != null ">insert_time = #{insetallTime},</if>
             <if test="trainTime != null ">train_time = #{trainTime},</if>
             <if test="businessTime != null ">business_time = #{businessTime},</if>
             <if test="terminationTime != null ">termination_time = #{terminationTime},</if>

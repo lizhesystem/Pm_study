@@ -455,7 +455,6 @@ export default {
     getList() {
       this.loading = true;
       listUser(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-          debugger
           this.userList = response.rows;
           this.total = response.total;
           this.loading = false;

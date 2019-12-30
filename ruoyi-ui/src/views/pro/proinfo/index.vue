@@ -1,10 +1,9 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-
       <el-form-item label="项目编号" prop="proName">
         <el-input
-          v-model="queryParams.proName"
+          v-model="queryParams.proNum"
           placeholder="请输入项目编号"
           clearable
           size="small"
@@ -37,7 +36,7 @@
           placeholder="运行状态"
           clearable
           size="small"
-          style="width: 240px"
+          style="width: 200px"
         >
           <el-option
             v-for="dict in proStatusOptions"
@@ -48,61 +47,20 @@
         </el-select>
       </el-form-item>
 
-      <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+      <el-form-item>
+      <el-button style="margin-left: 10px" type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
       <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       <el-button type="text" @click="boxShow = !boxShow">高级查询</el-button>
-
+      </el-form-item>
       <transition name="sub-comments">
         <div v-if="boxShow">
-          <el-form-item label="交易模式" prop="acceptanceStatus">
-            <el-select
-              v-model="queryParams.proStatus"
-              placeholder="输入交易模式"
-              clearable
-              size="small"
-            >
-              <el-option
-                v-for="dict in tradeModeOptions"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="部署人员" prop="insetallId">
-            <el-input
-              v-model="queryParams.insetallId"
-              placeholder="请输入系统部署人员"
-              clearable
-              size="small"
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item label="培训人员" prop="trainId">
-            <el-input
-              v-model="queryParams.trainId"
-              placeholder="请输入系统培训人人员"
-              clearable
-              size="small"
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item label="银行接口" prop="bankName">
-            <el-input
-              v-model="queryParams.bankName"
-              placeholder="请输入银行名称"
-              clearable
-              size="small"
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
           <el-form-item label="验收状态" prop="acceptanceStatus">
             <el-select
               v-model="queryParams.acceptanceStatus"
               placeholder="验收状态"
               clearable
               size="small"
-              style="width: 240px"
+              style="width: 200px"
             >
               <el-option
                 v-for="dict in acceptanceOptions"
@@ -112,36 +70,114 @@
               />
             </el-select>
           </el-form-item>
+          <el-form-item label="交易模式" prop="acceptanceStatus">
+            <el-select
+              v-model="queryParams.tradeMode"
+              placeholder="请输入交易模式"
+              clearable
+              size="small"
+              filterable
+              multiple
+            >
+              <el-option
+                v-for="dict in tradeModeOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="银行接口" prop="bankId">
+            <el-select
+              v-model="queryParams.bankId"
+              placeholder="请输入银行名称"
+              clearable
+              size="small"
+              filterable
+              multiple>
+            <el-option
+              v-for="dict in bankType"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="部署人员" prop="insetallName">
+            <el-input
+              v-model="queryParams.insetallName"
+              placeholder="请输入部署人员姓名"
+              clearable
+              size="small"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="培训人员" prop="trainName">
+            <el-input
+              v-model="queryParams.trainName"
+              placeholder="请输入培训人员姓名"
+              clearable
+              size="small"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <br>
+
           <el-form-item label="部署时间" prop="insertTime">
             <el-date-picker clearable size="small" style="width: 200px"
-                            v-model="queryParams.insertTime"
-                            type="date"
+                            v-model="dateRangeForInsetall"
+                            :disabled="dateFlag"
+                            type="daterange"
                             value-format="yyyy-MM-dd"
-                            placeholder="选择部署时间">
+                            range-separator="-"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+            >
             </el-date-picker>
           </el-form-item>
           <el-form-item label="培训时间" prop="trainTime">
             <el-date-picker clearable size="small" style="width: 200px"
-                            v-model="queryParams.trainTime"
-                            type="date"
+                            v-model="dateRangeForTrain"
+                            :disabled="dateFlag"
+                            type="daterange"
                             value-format="yyyy-MM-dd"
-                            placeholder="选择培训时间">
+                            range-separator="-"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
           <el-form-item label="上线时间" prop="businessTime">
             <el-date-picker clearable size="small" style="width: 200px"
-                            v-model="queryParams.businessTime"
-                            type="date"
+                            v-model="dateRangeForBusiness"
+                            :disabled="dateFlag"
+                            type="daterange"
                             value-format="yyyy-MM-dd"
-                            placeholder="选择上线时间">
+                            range-separator="-"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="终止时间" prop="terminationTime">
+          <el-form-item label="暂停时间" prop="businessTime">
             <el-date-picker clearable size="small" style="width: 200px"
-                            v-model="queryParams.terminationTime"
-                            type="date"
+                            v-model="dateRangeForTermination"
+                            :disabled="dateFlag"
+                            type="daterange"
                             value-format="yyyy-MM-dd"
-                            placeholder="选择终止时间">
+                            range-separator="-"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="创建时间" prop="businessTime">
+            <el-date-picker clearable size="small" style="width: 200px"
+                            v-model="dateRangeForCreate"
+                            :disabled="dateFlag"
+                            type="daterange"
+                            value-format="yyyy-MM-dd"
+                            range-separator="-"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
         </div>
@@ -198,16 +234,53 @@
         <template slot-scope="props">
         </template>
       </el-table-column>
-      <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="序列" align="center" prop="proId"/>
+      <el-table-column type="selection" width="50" align="center"/>
+      <el-table-column label="序列" width="50" align="center" prop="proId"/>
       <el-table-column label="项目编号" align="center" prop="proNum"/>
       <el-table-column label="项目名称" align="center" prop="proName"/>
-      <el-table-column label="运维人员" align="center">
-        <template>
-          <span v-text="workName"></span>
+      <el-table-column label="运维人员" align="center" prop="workName"/>
+      <el-table-column label="项目经理" align="center" prop="proManager"/>
+      <el-table-column label="运行状态" align="center">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.proStatus === '1'" type="success">正常</el-tag>
+          <el-tag v-else-if="scope.row.proStatus === '2'" type="danger">暂停</el-tag>
+          <el-tag v-else type="warning">部分暂停</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="运行状态" align="center" prop="proStatus"/>
+      <el-table-column label="验收状态" align="center" prop="acceptanceStatus">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.acceptanceStatus === '1'" type="success">已验收</el-tag>
+          <el-tag v-else-if="scope.row.acceptanceStatus === '2'" type="danger">未验收</el-tag>
+          <el-tag v-else type="warning">部分验收</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="项目上线日期" align="center" prop="businessTime"/>
+      <el-table-column label="更新日期" align="center" prop="updateTime"/>
+
+      <el-table-column
+        label="操作"
+        align="center"
+        width="180"
+        class-name="small-padding fixed-width"
+      >
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row)"
+            v-hasPermi="['pro:proinfo:edit']"
+          >修改</el-button>
+          <el-button
+            v-if="scope.row.userId !== 1"
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.row)"
+            v-hasPermi="['pro:proinfo:remove']"
+          >删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <!--分页-->
     <pagination
@@ -310,7 +383,9 @@
 
 <script>
   import { listProinfo, getProinfo, delProinfo, addProinfo, updateProinfo, exportProinfo } from '@/api/pro/proinfo'
+  import { getUser } from '@/api/system/user'
   import { resolveBlob } from '../../../utils/zipdownload'
+  import { getInfo } from '../../../api/login'
 
   export default {
     data() {
@@ -331,14 +406,24 @@
         proinfoList: [],
         // 交易模式
         tradeModeOptions: [],
+        // 银行接口
+        bankType:[],
         // 运行状态
         proStatusOptions: [],
         // 验收状态
         acceptanceOptions: [],
+        // 日期范围
+        dateRangeForInsetall: [],
+        dateRangeForTrain: [],
+        dateRangeForBusiness: [],
+        dateRangeForTermination: [],
+        dateRangeForCreate: [],
+        dateFlag: false,
         // 弹出层标题
         title: '',
         // 是否显示弹出层
         open: false,
+        nickName: '',
         // 查询参数
         queryParams: {
           pageNum: 1,
@@ -358,7 +443,7 @@
           trainId: undefined,
           acceptanceStatus: undefined,
           proStatus: undefined,
-          insertTime: undefined,
+          insetallTime: undefined,
           trainTime: undefined,
           businessTime: undefined,
           terminationTime: undefined
@@ -370,14 +455,26 @@
       }
     },
     created() {
-      this.getList()
+      this.getList();
+      this.getDicts("pro_run_status").then(response => {
+        this.proStatusOptions = response.data;
+      });
+      this.getDicts("pro_trade_mode").then(response => {
+        this.tradeModeOptions = response.data;
+      });
+      this.getDicts("pro_bank_type").then(response => {
+        this.bankType = response.data;
+      });
+      this.getDicts("pro_completion_status").then(response => {
+        this.acceptanceOptions = response.data;
+      });
     },
     methods: {
       /** 查询项目列列表 */
       getList() {
         this.loading = true
         listProinfo(this.queryParams).then(response => {
-          console.log(response)
+          // console.log(response)
           this.proinfoList = response.rows
           this.total = response.total
           this.loading = false
@@ -402,8 +499,8 @@
           custphone: undefined,
           custemail: undefined,
           proManager: undefined,
-          insetallId: undefined,
-          trainId: undefined,
+          insetallName: undefined,
+          trainName: undefined,
           acceptanceStatus: '0',
           proStatus: '0',
           insertTime: undefined,
@@ -509,7 +606,7 @@
       }
     },
     computed: {
-      workName() {
+      workName: function(xx) {
         return 'xxx'
       }
     }

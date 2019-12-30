@@ -1,5 +1,6 @@
 package com.ruoyi.project.pro.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel;
@@ -78,19 +79,19 @@ public class ProInfo extends BaseEntity {
      * 运维人员
      */
     @Excel(name = "运维人员")
-    private Long workId;
+    private String workName;
 
     /**
      * 系统部署人员
      */
     @Excel(name = "系统部署人员")
-    private Long insetallId;
+    private String insetallName;
 
     /**
      * 系统培训人人员
      */
     @Excel(name = "系统培训人人员")
-    private Long trainId;
+    private String trainName;
 
     /**
      * 验收状态：1验收 2未验收
@@ -108,24 +109,28 @@ public class ProInfo extends BaseEntity {
      * 部署时间
      */
     @Excel(name = "部署时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date insertTime;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date insetallTime;
 
     /**
      * 培训时间
      */
     @Excel(name = "培训时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date trainTime;
 
     /**
      * 上线时间
      */
     @Excel(name = "上线时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date businessTime;
 
     /**
      * 终止时间
      */
     @Excel(name = "终止时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date terminationTime;
 
     public void setProId(Long proId) {
@@ -176,12 +181,28 @@ public class ProInfo extends BaseEntity {
         return bankId;
     }
 
-    public Long getWorkId() {
-        return workId;
+    public String getWorkName() {
+        return workName;
     }
 
-    public void setWorkId(Long workId) {
-        this.workId = workId;
+    public void setWorkName(String workName) {
+        this.workName = workName;
+    }
+
+    public String getInsetallName() {
+        return insetallName;
+    }
+
+    public void setInsetallName(String insetallName) {
+        this.insetallName = insetallName;
+    }
+
+    public String getTrainName() {
+        return trainName;
+    }
+
+    public void setTrainName(String trainName) {
+        this.trainName = trainName;
     }
 
     public void setCustname(String custname) {
@@ -216,21 +237,6 @@ public class ProInfo extends BaseEntity {
         return proManager;
     }
 
-    public void setInsetallId(Long insetallId) {
-        this.insetallId = insetallId;
-    }
-
-    public Long getInsetallId() {
-        return insetallId;
-    }
-
-    public void setTrainId(Long trainId) {
-        this.trainId = trainId;
-    }
-
-    public Long getTrainId() {
-        return trainId;
-    }
 
     public void setAcceptanceStatus(String acceptanceStatus) {
         this.acceptanceStatus = acceptanceStatus;
@@ -248,12 +254,12 @@ public class ProInfo extends BaseEntity {
         return proStatus;
     }
 
-    public void setInsertTime(Date insertTime) {
-        this.insertTime = insertTime;
+    public Date getInsetallTime() {
+        return insetallTime;
     }
 
-    public Date getInsertTime() {
-        return insertTime;
+    public void setInsetallTime(Date insetallTime) {
+        this.insetallTime = insetallTime;
     }
 
     public void setTrainTime(Date trainTime) {
@@ -282,31 +288,26 @@ public class ProInfo extends BaseEntity {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("proId", getProId())
-                .append("proNum", getProNum())
-                .append("proName", getProName())
-                .append("operator", getOperator())
-                .append("tradeMode", getTradeMode())
-                .append("bankId", getBankId())
-                .append("WorkId", getWorkId())
-                .append("custname", getCustname())
-                .append("custphone", getCustphone())
-                .append("custemail", getCustemail())
-                .append("proManager", getProManager())
-                .append("insetallId", getInsetallId())
-                .append("trainId", getTrainId())
-                .append("acceptanceStatus", getAcceptanceStatus())
-                .append("proStatus", getProStatus())
-                .append("insertTime", getInsertTime())
-                .append("trainTime", getTrainTime())
-                .append("businessTime", getBusinessTime())
-                .append("terminationTime", getTerminationTime())
-                .append("createBy", getCreateBy())
-                .append("createTime", getCreateTime())
-                .append("updateBy", getUpdateBy())
-                .append("updateTime", getUpdateTime())
-                .append("remark", getRemark())
-                .toString();
+        return "ProInfo{" +
+                "proId=" + proId +
+                ", proNum='" + proNum + '\'' +
+                ", proName='" + proName + '\'' +
+                ", operator='" + operator + '\'' +
+                ", tradeMode='" + tradeMode + '\'' +
+                ", bankId='" + bankId + '\'' +
+                ", custname='" + custname + '\'' +
+                ", custphone='" + custphone + '\'' +
+                ", custemail='" + custemail + '\'' +
+                ", proManager='" + proManager + '\'' +
+                ", workName='" + workName + '\'' +
+                ", insetallName='" + insetallName + '\'' +
+                ", trainName='" + trainName + '\'' +
+                ", acceptanceStatus='" + acceptanceStatus + '\'' +
+                ", proStatus='" + proStatus + '\'' +
+                ", insetallTime=" + insetallTime +
+                ", trainTime=" + trainTime +
+                ", businessTime=" + businessTime +
+                ", terminationTime=" + terminationTime +
+                '}';
     }
 }
