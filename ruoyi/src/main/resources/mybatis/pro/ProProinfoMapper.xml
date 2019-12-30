@@ -10,14 +10,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="proName"    column="pro_name"    />
         <result property="operator"    column="operator"    />
         <result property="tradeMode"    column="trade_mode"    />
-        <result property="bankId"    column="bank_id"    />
-        <result property="bankName"    column="bank_name"    />
-        <result property="custname"    column="custname"    />
+        <result property="bankId"       column="bank_id"    />
+        <result property="workId"       column="work_id"    />
+        <result property="custname"     column="custname"    />
         <result property="custphone"    column="custphone"    />
         <result property="custemail"    column="custemail"    />
         <result property="proManager"    column="pro_manager"    />
         <result property="insetallId"    column="insetall_id"    />
-        <result property="trainId"    column="train_id"    />
+        <result property="trainId"       column="train_id"    />
         <result property="acceptanceStatus"    column="acceptance_status"    />
         <result property="proStatus"    column="pro_status"    />
         <result property="insertTime"    column="insert_time"    />
@@ -32,9 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectProProinfoVo">
-        select pro_id, pro_num, pro_name, operator, trade_mode, bank_id, bank_name, custname, custphone,
-        custemail, pro_manager, insetall_id, train_id, acceptance_status, pro_status, insert_time, train_time,
-         business_time, termination_time, create_by, create_time, update_by, update_time, remark
+        select *
         from pro_proinfo
     </sql>
 
@@ -46,7 +44,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
             <if test="tradeMode != null  and tradeMode != ''"> and trade_mode = #{tradeMode}</if>
             <if test="bankId != null  and bankId != ''"> and bank_id = #{bankId}</if>
-            <if test="bankName != null  and bankName != ''"> and bank_name like concat('%', #{bankName}, '%')</if>
             <if test="custname != null  and custname != ''"> and custname like concat('%', #{custname}, '%')</if>
             <if test="custphone != null  and custphone != ''"> and custphone = #{custphone}</if>
             <if test="custemail != null  and custemail != ''"> and custemail = #{custemail}</if>
@@ -75,7 +72,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operator != null  and operator != ''">operator,</if>
             <if test="tradeMode != null  and tradeMode != ''">trade_mode,</if>
             <if test="bankId != null  and bankId != ''">bank_id,</if>
-            <if test="bankName != null  and bankName != ''">bank_name,</if>
             <if test="custname != null  and custname != ''">custname,</if>
             <if test="custphone != null  and custphone != ''">custphone,</if>
             <if test="custemail != null  and custemail != ''">custemail,</if>
@@ -100,7 +96,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operator != null  and operator != ''">#{operator},</if>
             <if test="tradeMode != null  and tradeMode != ''">#{tradeMode},</if>
             <if test="bankId != null  and bankId != ''">#{bankId},</if>
-            <if test="bankName != null  and bankName != ''">#{bankName},</if>
             <if test="custname != null  and custname != ''">#{custname},</if>
             <if test="custphone != null  and custphone != ''">#{custphone},</if>
             <if test="custemail != null  and custemail != ''">#{custemail},</if>
@@ -129,7 +124,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operator != null  and operator != ''">operator = #{operator},</if>
             <if test="tradeMode != null  and tradeMode != ''">trade_mode = #{tradeMode},</if>
             <if test="bankId != null  and bankId != ''">bank_id = #{bankId},</if>
-            <if test="bankName != null  and bankName != ''">bank_name = #{bankName},</if>
             <if test="custname != null  and custname != ''">custname = #{custname},</if>
             <if test="custphone != null  and custphone != ''">custphone = #{custphone},</if>
             <if test="custemail != null  and custemail != ''">custemail = #{custemail},</if>

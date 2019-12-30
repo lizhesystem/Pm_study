@@ -50,13 +50,6 @@ public class ProInfo extends BaseEntity {
      */
     @Excel(name = "银行编号：根据字典获取")
     private String bankId;
-
-    /**
-     * 银行名称
-     */
-    @Excel(name = "银行名称")
-    private String bankName;
-
     /**
      * 客户联系人姓名
      */
@@ -80,6 +73,12 @@ public class ProInfo extends BaseEntity {
      */
     @Excel(name = "所属项目经理")
     private String proManager;
+
+    /**
+     * 运维人员
+     */
+    @Excel(name = "运维人员")
+    private Long workId;
 
     /**
      * 系统部署人员
@@ -177,12 +176,12 @@ public class ProInfo extends BaseEntity {
         return bankId;
     }
 
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
+    public Long getWorkId() {
+        return workId;
     }
 
-    public String getBankName() {
-        return bankName;
+    public void setWorkId(Long workId) {
+        this.workId = workId;
     }
 
     public void setCustname(String custname) {
@@ -290,7 +289,7 @@ public class ProInfo extends BaseEntity {
                 .append("operator", getOperator())
                 .append("tradeMode", getTradeMode())
                 .append("bankId", getBankId())
-                .append("bankName", getBankName())
+                .append("WorkId", getWorkId())
                 .append("custname", getCustname())
                 .append("custphone", getCustphone())
                 .append("custemail", getCustemail())
