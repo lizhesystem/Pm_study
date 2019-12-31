@@ -351,6 +351,17 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     /**
+     * 根据nickname查询用户是否存在
+     * @param  nickname 用户昵称
+     * @return
+     */
+    @Override
+    public String checkNickNameUnique(String nickname) {
+        return null;
+    }
+
+
+    /**
      * 导入用户数据
      *
      * @param userList        用户数据列表
@@ -402,5 +413,6 @@ public class SysUserServiceImpl implements ISysUserService {
         }
         return successMsg.toString();
     }
+
 
 }

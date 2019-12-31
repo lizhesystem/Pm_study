@@ -2,10 +2,13 @@ package com.ruoyi.project.pro.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.project.pro.domain.ProInfo;
 import com.ruoyi.project.pro.service.IProProinfoService;
+import com.ruoyi.project.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,6 +37,9 @@ public class ProProInfoController extends BaseController {
     @Autowired
     private IProProinfoService proProinfoService;
 
+    @Autowired
+    private ISysUserService sysUserService;
+
     /**
      * 查询项目列列表
      */
@@ -49,7 +55,7 @@ public class ProProInfoController extends BaseController {
      * 导出项目列列表
      */
     @PreAuthorize("@ss.hasPermi('pro:proinfo:export')")
-    @Log(title = "项目列", businessType = BusinessType.EXPORT)
+    @Log(title = "项目列表", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(ProInfo proInfo) {
         List<ProInfo> list = proProinfoService.selectProProinfoList(proInfo);
@@ -70,9 +76,18 @@ public class ProProInfoController extends BaseController {
      * 新增项目列
      */
     @PreAuthorize("@ss.hasPermi('pro:proinfo:add')")
-    @Log(title = "项目列", businessType = BusinessType.INSERT)
+    @Log(title = "项目列表", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ProInfo proInfo) {
+        if (UserConstants.NOT_UNIQUE.equals(sysUserService.checkNickNameUnique(proInfo.getWorkName()))) {
+            return AjaxResult.error("所属运维人员'" + proInfo.getWorkName() + "'不存在,请重新录入。");
+        }
+        if (UserConstants.NOT_UNIQUE.equals(sysUserService.checkNickNameUnique(proInfo.getInsetallName()))) {
+            return AjaxResult.error("所属部署人员'" + proInfo.getWorkName() + "'不存在,请重新录入。");
+        }
+        if (UserConstants.NOT_UNIQUE.equals(sysUserService.checkNickNameUnique(proInfo.getTrainName()))) {
+            return AjaxResult.error("所属培训人员'" + proInfo.getWorkName() + "'不存在,请重新录入。");
+        }
         return toAjax(proProinfoService.insertProProinfo(proInfo));
     }
 
@@ -80,7 +95,7 @@ public class ProProInfoController extends BaseController {
      * 修改项目列
      */
     @PreAuthorize("@ss.hasPermi('pro:proinfo:edit')")
-    @Log(title = "项目列", businessType = BusinessType.UPDATE)
+    @Log(title = "项目列表", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ProInfo proInfo) {
         return toAjax(proProinfoService.updateProProinfo(proInfo));
@@ -90,7 +105,7 @@ public class ProProInfoController extends BaseController {
      * 删除项目列
      */
     @PreAuthorize("@ss.hasPermi('pro:proinfo:remove')")
-    @Log(title = "项目列", businessType = BusinessType.DELETE)
+    @Log(title = "项目列表", businessType = BusinessType.DELETE)
     @DeleteMapping("/{proIds}")
     public AjaxResult remove(@PathVariable Long[] proIds) {
         return toAjax(proProinfoService.deleteProProinfoByIds(proIds));

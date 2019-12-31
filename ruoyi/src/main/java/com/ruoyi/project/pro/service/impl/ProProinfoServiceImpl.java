@@ -87,4 +87,5 @@ public class ProProinfoServiceImpl implements IProProinfoService {
     public int deleteProProinfoById(Long proId) {
         return proProinfoMapper.deleteProProinfoById(proId);
     }
+
 }

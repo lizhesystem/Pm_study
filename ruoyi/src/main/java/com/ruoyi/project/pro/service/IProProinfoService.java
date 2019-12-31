@@ -58,4 +58,11 @@ public interface IProProinfoService
      * @return 结果
      */
     public int deleteProProinfoById(Long proId);
+
+    ///**
+    // * 校验姓名唯一性
+    // * @param name 获取的用户名
+    // * @return 结果
+    // */
+    //public String checkWorkNameUnique(String name);
 }

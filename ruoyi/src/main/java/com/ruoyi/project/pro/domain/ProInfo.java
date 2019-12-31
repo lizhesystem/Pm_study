@@ -127,6 +127,13 @@ public class ProInfo extends BaseEntity {
     private Date businessTime;
 
     /**
+     * 验收时间
+     */
+    @Excel(name = "验收时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date acceptanceTime;
+
+    /**
      * 终止时间
      */
     @Excel(name = "终止时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -286,6 +293,14 @@ public class ProInfo extends BaseEntity {
         return terminationTime;
     }
 
+    public Date getAcceptanceTime() {
+        return acceptanceTime;
+    }
+
+    public void setAcceptanceTime(Date acceptanceTime) {
+        this.acceptanceTime = acceptanceTime;
+    }
+
     @Override
     public String toString() {
         return "ProInfo{" +
@@ -307,6 +322,7 @@ public class ProInfo extends BaseEntity {
                 ", insetallTime=" + insetallTime +
                 ", trainTime=" + trainTime +
                 ", businessTime=" + businessTime +
+                ", acceptanceTime=" + acceptanceTime +
                 ", terminationTime=" + terminationTime +
                 '}';
     }

@@ -1,61 +1,79 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.project.pro.mapper.ProProinfoMapper">
 
     <resultMap type="ProInfo" id="ProProinfoResult">
-        <result property="proId"    column="pro_id"    />
-        <result property="proNum"    column="pro_num"    />
-        <result property="proName"    column="pro_name"    />
-        <result property="operator"    column="operator"    />
-        <result property="tradeMode"    column="trade_mode"    />
-        <result property="bankId"       column="bank_id"    />
-        <result property="workName"       column="work_name"    />
-        <result property="custname"     column="custname"    />
-        <result property="custphone"    column="custphone"    />
-        <result property="custemail"    column="custemail"    />
-        <result property="proManager"    column="pro_manager"    />
-        <result property="insetallName"    column="insetall_name"    />
-        <result property="trainName"       column="train_name"    />
-        <result property="acceptanceStatus"    column="acceptance_status"    />
-        <result property="proStatus"    column="pro_status"    />
-        <result property="insetallTime"    column="insert_time"    />
-        <result property="trainTime"    column="train_time"    />
-        <result property="businessTime"    column="business_time"    />
-        <result property="terminationTime"    column="termination_time"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="remark"    column="remark"    />
+        <result property="proId" column="pro_id"/>
+        <result property="proNum" column="pro_num"/>
+        <result property="proName" column="pro_name"/>
+        <result property="operator" column="operator"/>
+        <result property="tradeMode" column="trade_mode"/>
+        <result property="bankId" column="bank_id"/>
+        <result property="workName" column="work_name"/>
+        <result property="custname" column="custname"/>
+        <result property="custphone" column="custphone"/>
+        <result property="custemail" column="custemail"/>
+        <result property="proManager" column="pro_manager"/>
+        <result property="insetallName" column="insetall_name"/>
+        <result property="trainName" column="train_name"/>
+        <result property="acceptanceStatus" column="acceptance_status"/>
+        <result property="proStatus" column="pro_status"/>
+        <result property="insetallTime" column="insert_time"/>
+        <result property="trainTime" column="train_time"/>
+        <result property="businessTime" column="business_time"/>
+        <result property="acceptanceTime" column="acceptance_time"/>
+        <result property="terminationTime" column="termination_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
     </resultMap>
 
     <sql id="selectProProinfoVo">
-        select *
-        from pro_proinfo
+        SELECT pro_id,pro_num,pro_name,operator,trade_mode,bank_id,custname,custphone,custemail,pro_manager,work_name,insetall_name,train_name,acceptance_status,pro_status,insetall_time,train_time,business_time,acceptance_time,termination_time,create_by,create_time,update_by,update_time,remark
+            FROM
+        pro_proinfo
     </sql>
 
     <select id="selectProProinfoList" parameterType="ProInfo" resultMap="ProProinfoResult">
         <include refid="selectProProinfoVo"/>
         <where>
-            <if test="proNum != null  and proNum != ''"> and pro_num = #{proNum}</if>
-            <if test="proName != null  and proName != ''"> and pro_name like concat('%', #{proName}, '%')</if>
-            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
-            <if test="tradeMode != null  and tradeMode != ''"> and trade_mode = #{tradeMode}</if>
-            <if test="bankId != null  and bankId != ''"> and bank_id = #{bankId}</if>
-            <if test="custname != null  and custname != ''"> and custname like concat('%', #{custname}, '%')</if>
-            <if test="custphone != null  and custphone != ''"> and custphone = #{custphone}</if>
-            <if test="custemail != null  and custemail != ''"> and custemail = #{custemail}</if>
-            <if test="proManager != null  and proManager != ''"> and pro_manager = #{proManager}</if>
-            <if test="insetallName != null "> and insetall_name = #{insetallName}</if>
-            <if test="trainName != null "> and train_name = #{trainName}</if>
-            <if test="acceptanceStatus != null  and acceptanceStatus != ''"> and acceptance_status = #{acceptanceStatus}</if>
-            <if test="proStatus != null  and proStatus != ''"> and pro_status = #{proStatus}</if>
-            <if test="insetallTime != null "> and insetall_time = #{insetallTime}</if>
-            <if test="trainTime != null "> and train_time = #{trainTime}</if>
-            <if test="businessTime != null "> and business_time = #{businessTime}</if>
-            <if test="terminationTime != null "> and termination_time = #{terminationTime}</if>
+            <if test="proNum != null  and proNum != ''">
+                and pro_num like concat('%', #{proNum}, '%')
+            </if>
+
+            <if test="proName != null  and proName != ''">
+                 and pro_name like concat('%', #{proName}, '%')
+            </if>
+            <if test="tradeMode != null  and tradeMode != ''">
+                and trade_mode like concat('%', #{tradeMode}, '%')
+            </if>
+            <if test="bankId != null  and bankId != ''">
+                and bank_id like concat('%', #{bankId}, '%')
+            </if>
+            <if test="insetallName != null ">
+                 and insetall_name  like concat('%', #{insetallName}, '%')
+            </if>
+            <if test="trainName != null ">
+                and train_name like concat('%', #{trainName}, '%')
+            </if>
+            <if test="acceptanceStatus != null  and acceptanceStatus != ''"> <!-- 验收状态 -->
+                and acceptance_status =  #{acceptanceStatus}
+            </if>
+            <if test="proStatus != null  and proStatus != ''"> <!-- 运行状态 -->
+                and pro_status = #{proStatus}
+            </if>
+
+            <if test="beginTime != null and beginTime != ''"><!--验收时间检索 -->
+                AND date_format(acceptance_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''"><!-- 验收时间检索 -->
+                AND date_format(acceptance_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+            </if>
+
         </where>
     </select>
 
@@ -76,6 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="custphone != null  and custphone != ''">custphone,</if>
             <if test="custemail != null  and custemail != ''">custemail,</if>
             <if test="proManager != null  and proManager != ''">pro_manager,</if>
+            <if test="workName != null  and workName != ''">work_name,</if>
             <if test="insetallName != null ">insetall_name,</if>
             <if test="trainName != null ">train_name,</if>
             <if test="acceptanceStatus != null  and acceptanceStatus != ''">acceptance_status,</if>
@@ -83,13 +102,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="insetallTime != null ">insetall_time,</if>
             <if test="trainTime != null ">train_time,</if>
             <if test="businessTime != null ">business_time,</if>
+            <if test="acceptanceTime != null ">acceptance_time,</if>
             <if test="terminationTime != null ">termination_time,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
             <if test="remark != null  and remark != ''">remark,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="proNum != null  and proNum != ''">#{proNum},</if>
             <if test="proName != null  and proName != ''">#{proName},</if>
@@ -107,13 +127,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="insetallTime != null ">#{insetallTime},</if>
             <if test="trainTime != null ">#{trainTime},</if>
             <if test="businessTime != null ">#{businessTime},</if>
+            <if test="acceptanceTime != null ">#{acceptanceTime},</if>
             <if test="terminationTime != null ">#{terminationTime},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateProProinfo" parameterType="ProInfo">
@@ -128,9 +149,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="custphone != null  and custphone != ''">custphone = #{custphone},</if>
             <if test="custemail != null  and custemail != ''">custemail = #{custemail},</if>
             <if test="proManager != null  and proManager != ''">pro_manager = #{proManager},</if>
-            <if test="insetallName != null "> and insetall_name = #{insetallName}</if>
-            <if test="trainName != null "> and train_name = #{trainName}</if>
-            <if test="acceptanceStatus != null  and acceptanceStatus != ''">acceptance_status = #{acceptanceStatus},</if>
+            <if test="insetallName != null ">and insetall_name = #{insetallName}</if>
+            <if test="trainName != null ">and train_name = #{trainName}</if>
+            <if test="acceptanceStatus != null  and acceptanceStatus != ''">acceptance_status = #{acceptanceStatus},
+            </if>
             <if test="proStatus != null  and proStatus != ''">pro_status = #{proStatus},</if>
             <if test="insetallTime != null ">insert_time = #{insetallTime},</if>
             <if test="trainTime != null ">train_time = #{trainTime},</if>
