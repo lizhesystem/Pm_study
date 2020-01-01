@@ -6,6 +6,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel;
 import com.ruoyi.framework.web.domain.BaseEntity;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -152,6 +155,8 @@ public class ProInfo extends BaseEntity {
         this.proNum = proNum;
     }
 
+    @NotBlank(message = "项目编号不能为空")
+    @Size(min = 0, max = 10, message = "项目编号长度不能超过10个字符")
     public String getProNum() {
         return proNum;
     }
@@ -160,6 +165,8 @@ public class ProInfo extends BaseEntity {
         this.proName = proName;
     }
 
+    @NotBlank(message = "项目名称不能为空")
+    @Size(min = 0, max = 20, message = "项目编号长度不能超过20个字符")
     public String getProName() {
         return proName;
     }
@@ -188,6 +195,8 @@ public class ProInfo extends BaseEntity {
         return bankId;
     }
 
+    @NotBlank(message = "维护人员不能为空")
+    @Size(min = 0, max = 10, message = "维护人员姓名长度不能超过10个字符")
     public String getWorkName() {
         return workName;
     }
@@ -224,6 +233,7 @@ public class ProInfo extends BaseEntity {
         this.custphone = custphone;
     }
 
+    @Size(min = 0, max = 11, message = "联系电话长度不能超过11个字符")
     public String getCustphone() {
         return custphone;
     }
@@ -232,6 +242,8 @@ public class ProInfo extends BaseEntity {
         this.custemail = custemail;
     }
 
+    @Email(message = "邮箱格式不正确")
+    @Size(min = 0, max = 50, message = "邮箱长度不能超过50个字符")
     public String getCustemail() {
         return custemail;
     }
@@ -240,6 +252,8 @@ public class ProInfo extends BaseEntity {
         this.proManager = proManager;
     }
 
+    @NotBlank(message = "项目经理不能为空")
+    @Size(min = 0, max = 10, message = "项目经理姓名长度不能超过10个字符")
     public String getProManager() {
         return proManager;
     }

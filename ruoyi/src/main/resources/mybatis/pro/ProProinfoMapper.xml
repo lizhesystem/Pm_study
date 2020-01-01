@@ -20,7 +20,7 @@
         <result property="trainName" column="train_name"/>
         <result property="acceptanceStatus" column="acceptance_status"/>
         <result property="proStatus" column="pro_status"/>
-        <result property="insetallTime" column="insert_time"/>
+        <result property="insetallTime" column="insetall_time"/>
         <result property="trainTime" column="train_time"/>
         <result property="businessTime" column="business_time"/>
         <result property="acceptanceTime" column="acceptance_time"/>
@@ -120,8 +120,9 @@
             <if test="custphone != null  and custphone != ''">#{custphone},</if>
             <if test="custemail != null  and custemail != ''">#{custemail},</if>
             <if test="proManager != null  and proManager != ''">#{proManager},</if>
-            <if test="insetallName != null ">insetall_name,</if>
-            <if test="trainName != null ">train_name,</if>
+            <if test="workName != null and workName !=''">#{workName},</if>
+            <if test="insetallName != null and insetallName !='' ">#{insetallName},</if>
+            <if test="trainName != null and trainName !='' ">#{trainName},</if>
             <if test="acceptanceStatus != null  and acceptanceStatus != ''">#{acceptanceStatus},</if>
             <if test="proStatus != null  and proStatus != ''">#{proStatus},</if>
             <if test="insetallTime != null ">#{insetallTime},</if>
@@ -140,21 +141,19 @@
     <update id="updateProProinfo" parameterType="ProInfo">
         update pro_proinfo
         <trim prefix="SET" suffixOverrides=",">
+            trade_mode = #{tradeMode},bank_id = #{bankId},
             <if test="proNum != null  and proNum != ''">pro_num = #{proNum},</if>
             <if test="proName != null  and proName != ''">pro_name = #{proName},</if>
             <if test="operator != null  and operator != ''">operator = #{operator},</if>
-            <if test="tradeMode != null  and tradeMode != ''">trade_mode = #{tradeMode},</if>
-            <if test="bankId != null  and bankId != ''">bank_id = #{bankId},</if>
             <if test="custname != null  and custname != ''">custname = #{custname},</if>
             <if test="custphone != null  and custphone != ''">custphone = #{custphone},</if>
             <if test="custemail != null  and custemail != ''">custemail = #{custemail},</if>
             <if test="proManager != null  and proManager != ''">pro_manager = #{proManager},</if>
-            <if test="insetallName != null ">and insetall_name = #{insetallName}</if>
-            <if test="trainName != null ">and train_name = #{trainName}</if>
-            <if test="acceptanceStatus != null  and acceptanceStatus != ''">acceptance_status = #{acceptanceStatus},
-            </if>
+            <if test="workName != null and workName !=''">work_name = #{workName},</if>
+            <if test="insetallName != null and insetallName !=''">insetall_name = #{insetallName},</if>
+            <if test="trainName != null and trainName !=''">train_name = #{trainName},</if>
+            <if test="acceptanceStatus != null  and acceptanceStatus != ''">acceptance_status = #{acceptanceStatus},</if>
             <if test="proStatus != null  and proStatus != ''">pro_status = #{proStatus},</if>
-            <if test="insetallTime != null ">insert_time = #{insetallTime},</if>
             <if test="trainTime != null ">train_time = #{trainTime},</if>
             <if test="businessTime != null ">business_time = #{businessTime},</if>
             <if test="terminationTime != null ">termination_time = #{terminationTime},</if>
@@ -178,4 +177,7 @@
         </foreach>
     </delete>
 
+    <select id="selectProProInfoByNum" parameterType="String" resultType="int">
+		select count(1) from pro_proinfo where pro_num = #{proNum}
+	</select>
 </mapper>

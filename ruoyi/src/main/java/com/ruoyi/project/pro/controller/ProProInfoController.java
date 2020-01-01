@@ -3,6 +3,8 @@ package com.ruoyi.project.pro.controller;
 import java.util.List;
 
 import com.ruoyi.common.constant.UserConstants;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.project.pro.domain.ProInfo;
 import com.ruoyi.project.pro.service.IProProinfoService;
 import com.ruoyi.project.system.service.ISysUserService;
@@ -78,16 +80,22 @@ public class ProProInfoController extends BaseController {
     @PreAuthorize("@ss.hasPermi('pro:proinfo:add')")
     @Log(title = "项目列表", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody ProInfo proInfo) {
-        if (UserConstants.NOT_UNIQUE.equals(sysUserService.checkNickNameUnique(proInfo.getWorkName()))) {
+    public AjaxResult add(@Validated @RequestBody ProInfo proInfo) {
+        if(UserConstants.NOT_UNIQUE.equals(proProinfoService.selectProProInfoByNum(proInfo.getProNum()))){
+            return AjaxResult.error("项目编号'" + proInfo.getProNum() + "'已存在,请重新录入。");
+        }
+        if (!UserConstants.NOT_UNIQUE.equals(sysUserService.checkNickNameUnique(proInfo.getWorkName()))) {
             return AjaxResult.error("所属运维人员'" + proInfo.getWorkName() + "'不存在,请重新录入。");
         }
-        if (UserConstants.NOT_UNIQUE.equals(sysUserService.checkNickNameUnique(proInfo.getInsetallName()))) {
+        if (!UserConstants.NOT_UNIQUE.equals(sysUserService.checkNickNameUnique(proInfo.getInsetallName()))) {
             return AjaxResult.error("所属部署人员'" + proInfo.getWorkName() + "'不存在,请重新录入。");
         }
-        if (UserConstants.NOT_UNIQUE.equals(sysUserService.checkNickNameUnique(proInfo.getTrainName()))) {
+        if (!UserConstants.NOT_UNIQUE.equals(sysUserService.checkNickNameUnique(proInfo.getTrainName()))) {
             return AjaxResult.error("所属培训人员'" + proInfo.getWorkName() + "'不存在,请重新录入。");
         }
+        // 設置创建时间还有创建人
+        proInfo.setCreateTime(DateUtils.getNowDate());
+        proInfo.setCreateBy(SecurityUtils.getUsername());
         return toAjax(proProinfoService.insertProProinfo(proInfo));
     }
 
@@ -97,7 +105,19 @@ public class ProProInfoController extends BaseController {
     @PreAuthorize("@ss.hasPermi('pro:proinfo:edit')")
     @Log(title = "项目列表", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody ProInfo proInfo) {
+    public AjaxResult edit(@Validated @RequestBody ProInfo proInfo) {
+        if (!UserConstants.NOT_UNIQUE.equals(sysUserService.checkNickNameUnique(proInfo.getWorkName()))) {
+            return AjaxResult.error("所属运维人员'" + proInfo.getWorkName() + "'不存在,请重新录入。");
+        }
+        if (!UserConstants.NOT_UNIQUE.equals(sysUserService.checkNickNameUnique(proInfo.getInsetallName()))) {
+            return AjaxResult.error("所属部署人员'" + proInfo.getWorkName() + "'不存在,请重新录入。");
+        }
+        if (!UserConstants.NOT_UNIQUE.equals(sysUserService.checkNickNameUnique(proInfo.getTrainName()))) {
+            return AjaxResult.error("所属培训人员'" + proInfo.getWorkName() + "'不存在,请重新录入。");
+        }
+        // 设置更新时间还有更新人
+        proInfo.setUpdateTime(DateUtils.getNowDate());
+        proInfo.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(proProinfoService.updateProProinfo(proInfo));
     }
 

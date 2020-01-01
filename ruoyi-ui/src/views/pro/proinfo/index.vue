@@ -185,12 +185,40 @@
 
     </el-row>
     <el-table v-loading="loading" :data="proinfoList" @selection-change="handleSelectionChange">
+      <!--项目详细-->
       <el-table-column type="expand">
-        <template slot-scope="props">
+        <template slot-scope="scope">
+          <el-row justify="center">
+            <el-col :span="6">
+
+                    <div>name:lizheaaaaaaaaaaaaaaaaaaaaaaa</div>
+                    <div>age:aaaaaaaaaaaaaaaaa</div>
+
+            </el-col>
+            <el-col :span="3">
+
+              <el-timeline>
+                <el-timeline-item
+                  v-for="(activity, index) in activities"
+                  :key="index"
+                  :icon="activity.icon"
+                  :type="activity.type"
+                  :color="activity.color"
+                  :size="activity.size"
+                  :timestamp="activity.timestamp">
+                  {{activity.content}}
+                </el-timeline-item>
+              </el-timeline>
+            </el-col>
+          </el-row>
+          <el-row>
+
+          </el-row>
         </template>
       </el-table-column>
       <el-table-column type="selection" width="50" align="center"/>
-      <el-table-column label="序列" width="50" align="center" prop="proId"/>
+      <el-table-column type="index" label="序列" align-="center"/>
+      <!--<el-table-column label="序列" width="50" align="center" type="index"/>-->
       <el-table-column label="项目编号" align="center" prop="proNum"/>
       <el-table-column label="项目名称" align="center" prop="proName"/>
       <el-table-column label="运维人员" align="center" prop="workName"/>
@@ -210,7 +238,7 @@
         </template>
       </el-table-column>
       <el-table-column label="项目上线日期" align="center" prop="businessTime"/>
-      <el-table-column label="更新日期" align="center" prop="updateTime"/>
+      <el-table-column label="最后更新时间" align="center" prop="updateTime"/>
 
       <el-table-column
         label="操作"
@@ -276,12 +304,12 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="部署人员" prop="insetallName">
-              <el-input v-model="form.insetallId" placeholder="请输入部署人员"/>
+              <el-input v-model="form.insetallName" placeholder="请输入部署人员"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="培训人员" prop="trainName">
-              <el-input v-model="form.trainId" placeholder="请输入培训人员"/>
+              <el-input v-model="form.trainName" placeholder="请输入培训人员"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -333,9 +361,9 @@
         <el-divider content-position="center">项目详细</el-divider>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="部署时间" prop="insertTime">
+            <el-form-item label="部署时间" prop="insetallTime">
               <el-date-picker clearable size="small" style="width: 170px"
-                              v-model="form.insertTime"
+                              v-model="form.insetallTime"
                               type="date"
                               value-format="yyyy-MM-dd"
                               placeholder="选择部署时间">
@@ -366,7 +394,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="交易模式" prop="tradeMode">
-              <el-select width="200px" v-model="form.tradeMode" placeholder="请选择交易模式"
+              <el-select width="200px" v-model="tradeModeSelect" placeholder="请选择交易模式"
                          clearable
                          filterable
                          multiple
@@ -382,7 +410,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="银行接口" prop="bankId">
-              <el-select width="200px" v-model="form.bankId" placeholder="请选择交易模式"
+              <el-select width="200px" v-model="bankIdSelect" placeholder="请选择交易模式"
                          clearable
                          filterable
                          multiple
@@ -412,7 +440,7 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="验收时间" prop="terminationTime">
+            <el-form-item label="验收时间" prop="acceptanceTime">
               <el-date-picker clearable size="small" style="width: 170px"
                               v-model="form.acceptanceTime"
                               type="date"
@@ -433,7 +461,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-form-item label="备注">
+          <el-form-item label="备注" prop="remark">
             <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
           </el-form-item>
         </el-row>
@@ -448,13 +476,30 @@
 
 <script>
   import { listProinfo, getProinfo, delProinfo, addProinfo, updateProinfo, exportProinfo } from '@/api/pro/proinfo'
-  import { getUser } from '@/api/system/user'
-  import { resolveBlob } from '../../../utils/zipdownload'
-  import { getInfo } from '../../../api/login'
 
   export default {
     data() {
       return {
+        activities: [{
+          content: '支持使用图标',
+          timestamp: '2018-04-12 20:46',
+          size: 'large',
+          type: 'primary',
+          icon: 'el-icon-more'
+        }, {
+          content: '支持自定义颜色',
+          timestamp: '2018-04-03 20:46',
+          color: '#0bbd87'
+        }, {
+          content: '支持自定义尺寸',
+          timestamp: '2018-04-03 20:46',
+          size: 'large'
+        }, {
+          content: '默认样式的节点',
+          timestamp: '2018-04-03 20:46'
+        }],
+
+
         // 查询条件是否展开
         boxShow: false,
         // 遮罩层
@@ -488,6 +533,9 @@
         tradeModeFormat: '',
         // 处理bankID
         bankIdFormat: '',
+        // 处理select TradeMode
+        tradeModeSelect: [],
+        bankIdSelect: [],
         // 查询参数
         queryParams: {
           pageNum: 1,
@@ -514,6 +562,12 @@
           ],
           workName: [
             { required: true, message: '维护人员不能为空', trigger: 'blur' }
+          ],
+          insetallName: [
+            { required: true, message: '部署人员不能为空', trigger: 'blur' }
+          ],
+          trainName: [
+            { required: true, message: '培训人员不能为空', trigger: 'blur' }
           ],
           proStatus: [
             { required: true, message: '运行状态不能为空', trigger: 'change' }
@@ -593,7 +647,7 @@
           trainName: undefined,
           acceptanceStatus: undefined,
           proStatus: undefined,
-          insertTime: undefined,
+          insetallTime: undefined,
           trainTime: undefined,
           businessTime: undefined,
           acceptanceTime: undefined,
@@ -601,6 +655,8 @@
           remark: undefined
         }
         this.resetForm('form')
+        this.tradeModeSelect = []
+        this.bankIdSelect = []
       },
       /** 搜索按钮操作 */
       handleQuery() {
@@ -621,6 +677,8 @@
       /** 新增按钮操作 */
       handleAdd() {
         this.reset()
+        // 新增的时候重置下查询表单
+        this.resetForm('queryForm')
         this.open = true
         this.title = '添加项目信息'
       },
@@ -630,25 +688,28 @@
         const proId = row.proId || this.ids
         getProinfo(proId).then(response => {
           this.form = response.data
+          // 处理交易模式和银行编号,如果去掉交易模式默认状态是0
+          if (this.form.tradeMode !== null && this.form.tradeMode !== '' ) {
+            this.tradeModeSelect = this.form.tradeMode.split(',')
+          } else {
+            this.tradeModeSelect = []
+          }
+          if (this.form.bankId !== null && this.form.bankId !== '') {
+            this.bankIdSelect = this.form.bankId.split(',')
+          } else {
+            this.bankIdSelect = []
+          }
           this.open = true
-          this.title = '修改项目'
+          this.title = '修改项目信息'
         })
       },
       /** 提交按钮 */
       submitForm: function() {
         this.$refs['form'].validate(valid => {
           if (valid) {
-            // 处理交易模式和运行状态
-            if (this.form.tradeMode.length !== 0) {
-              this.form.tradeMode = this.form.tradeMode.join(',')
-            } else {
-              this.form.tradeMode = ' '
-            }
-            if (this.form.bankId.length !== 0 ) {
-              this.form.bankId = this.form.bankId.join(',')
-            } else {
-              this.form.bankId = ' '
-            }
+            // 去除表单空格
+            this.form.proNum = this.form.proNum.trim()
+            this.form.proName = this.form.proName.trim()
             if (this.form.proId != undefined) {
               updateProinfo(this.form).then(response => {
                 if (response.code === 200) {
@@ -676,7 +737,7 @@
       /** 删除按钮操作 */
       handleDelete(row) {
         const proIds = row.proId || this.ids
-        this.$confirm('是否确认删除项目列编号为"' + proIds + '"的数据项?', '警告', {
+        this.$confirm('是否确认删除该项目列数据?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -701,18 +762,9 @@
           this.download(response.msg)
         }).catch(function() {
         })
-      },
-      getDate() {
-        this.dateFlag = true
-
-        console.log(this.$refs)
       }
     },
-    computed: {
-      // gettradeModeFormat() {
-      //   return this.tradeModeFormat.join(',')
-      // }
-    },
+    computed: {},
     watch: {
       // 处理交易模式
       tradeModeFormat() {
@@ -721,15 +773,17 @@
       // 处理银行接口
       bankIdFormat() {
         this.queryParams.bankId = this.bankIdFormat.join(',')
+      },
+      tradeModeSelect() {
+        if (this.tradeModeSelect.length !== 0) {
+          this.form.tradeMode = this.tradeModeSelect.join(',')
+        }
+      },
+      bankIdSelect() {
+        if (this.bankIdSelect.length !==0 ) {
+          this.form.bankId = this.bankIdSelect.join(',')
+        }
       }
-      // // 处理上线状态
-      // proStatusFormat() {
-      //   this.form.proStatus = this.proStatusFormat.join(',')
-      // },
-      // // 处理验收状态
-      // acceptanceFormat(){
-      //   this.form.acceptanceStatus = this.acceptanceFormat.join(',')
-      // }
     }
   }
 </script>
@@ -746,9 +800,4 @@
     opacity: 0;
     max-height: 0;
   }
-
-  .dialog-form {
-    padding-bottom: 0;
-  }
-
 </style>

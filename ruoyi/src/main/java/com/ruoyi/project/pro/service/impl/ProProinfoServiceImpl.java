@@ -2,7 +2,9 @@ package com.ruoyi.project.pro.service.impl;
 
 import java.util.List;
 
+import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.pro.mapper.ProProinfoMapper;
@@ -50,7 +52,6 @@ public class ProProinfoServiceImpl implements IProProinfoService {
      */
     @Override
     public int insertProProinfo(ProInfo proInfo) {
-        proInfo.setCreateTime(DateUtils.getNowDate());
         return proProinfoMapper.insertProProinfo(proInfo);
     }
 
@@ -62,7 +63,6 @@ public class ProProinfoServiceImpl implements IProProinfoService {
      */
     @Override
     public int updateProProinfo(ProInfo proInfo) {
-        proInfo.setUpdateTime(DateUtils.getNowDate());
         return proProinfoMapper.updateProProinfo(proInfo);
     }
 
@@ -87,5 +87,21 @@ public class ProProinfoServiceImpl implements IProProinfoService {
     public int deleteProProinfoById(Long proId) {
         return proProinfoMapper.deleteProProinfoById(proId);
     }
+
+    /**
+     *  根据项目编号查询项目编号是否已存在
+     * @param proNum
+     * @return
+     */
+    @Override
+    public String selectProProInfoByNum(String proNum) {
+        int count =  proProinfoMapper.selectProProInfoByNum(proNum);
+        if(count != 0){
+            return UserConstants.NOT_UNIQUE;
+        }
+        return UserConstants.UNIQUE;
+    }
+
+
 
 }

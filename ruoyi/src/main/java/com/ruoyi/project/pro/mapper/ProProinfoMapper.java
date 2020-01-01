@@ -58,4 +58,11 @@ public interface ProProinfoMapper {
      * @return 结果
      */
     public int deleteProProinfoByIds(Long[] proIds);
+
+    /**
+     *  根据项目编号查询项目是否存在
+     * @param proNum
+     * @return
+     */
+    int selectProProInfoByNum(String proNum);
 }
