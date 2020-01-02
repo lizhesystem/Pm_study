@@ -131,7 +131,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 身份认证接口,主要负责登录处理
+     * 身份认证接口
+     * userDetailsService是自定义的认证方法，密码使用强散列哈希加密
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
