@@ -10,9 +10,9 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="上传用户" prop="proname">
+      <el-form-item label="上传用户" prop="pronum">
         <el-input
-          v-model="queryParams.proname"
+          v-model="queryParams.pronum"
           placeholder="请输入上传用户"
           clearable
           size="small"
@@ -80,26 +80,21 @@
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="worklogList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" border :data="worklogList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="序列" align="center" prop="worklogId"/>
+      <el-table-column label="序列" width="70" align="center" prop="worklogId"/>
       <el-table-column label="创建时间" align="center" prop="createTime" width="160">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{  parseTime(scope.row.createTime)  }}</span>
         </template>
       </el-table-column>
       <el-table-column label="日报标题" align="center" prop="worklogTitle"/>
-      <el-table-column label="项目名称" align="center" prop="proname">
+      <el-table-column label="项目名称" align="center" prop="proNum" >
         <template slot-scope="scope">
-          <span>{{ getFullProName(scope.row.proNum)}} </span>
+          <span>{{ getFullProName(scope.row.proNum)  }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="附件下载" align="center" prop="fileurl">
-        <template slot-scope="scope">
-          <a :href="scope.row.fileurl" download="日报文件"></a>
-          <!--<el-link type="primary"  :href="scope.row.fileurl"  >主要链接</el-link>-->
-        </template>
-      </el-table-column>
+      <el-table-column label="附件下载" align="center" prop="fileurl" :formatter="formatUrl" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -136,13 +131,13 @@
         <el-form-item label="日报标题" prop="worklogTitle">
           <el-input v-model="form.worklogTitle" placeholder="请输入日报标题"/>
         </el-form-item>
-        <el-form-item label="项目编号" prop="proNum">
+        <el-form-item label="项目名称" prop="proNum">
           <el-select v-model="form.proNum" placeholder="请选择" filterable>
             <el-option
               v-for="(item,index) in proInfoDict"
               :key="index"
-              :label="item.proNum"
-              :value="item.proName">
+              :label="item.proName"
+              :value="item.proNum">
               <span style="float: left">{{ item.proNum }}</span>
               <span style="float: right; color: #8492a6; font-size: 13px">{{ item.proName }}</span>
             </el-option>
@@ -185,7 +180,7 @@
       return {
         // 项目名称字典
         // proDict: [],
-        proInfoDict:[],
+        proInfoDict: [],
         // 遮罩层
         loading: true,
         // 选中数组
@@ -208,7 +203,7 @@
           pageSize: 10,
           worklogTitle: undefined,
           fileurl: undefined,
-          proname: undefined
+          pronum: undefined
         },
         // 表单参数
         form: {},
@@ -259,7 +254,7 @@
           worklogId: undefined,
           worklogTitle: undefined,
           fileurl: undefined,
-          proname: undefined
+          proNum: undefined
         }
         this.resetForm('form')
       },
@@ -299,7 +294,7 @@
       submitForm: function() {
         this.$refs['form'].validate(valid => {
           if (valid) {
-            if (this.form.fileurl !== '' && !this.form.fileurl !== null) {
+            if (this.form.fileurl) {
               if (this.form.worklogId != undefined) {
                 updateWorklog(this.form).then(response => {
                   if (response.code === 200) {
@@ -361,7 +356,6 @@
       getProDict() {
         getProdict().then(responce => {
           this.proInfoDict = responce.data
-          console.log(this.proInfoDict)
         })
       },
       // 文件上传中处理
@@ -374,14 +368,17 @@
         this.form.fileurl = response.fileUrl
         this.upload.isUploading = false
       },
+      // 获取项目全称
       getFullProName(proNum) {
-        return this.proInfoDict.filter( pro =>{
-          return pro[proNum] = proNum
+        let proInfo = this.proInfoDict.filter(pro => {
+          return pro.proNum === proNum
         })
+        return proNum + '' +proInfo[0].proName
+      },
+      formatUrl(row, column, cellValue, index){
+        return "<a>123   </a>"
       }
     },
-    computed: {
-
-    }
+    computed: {}
   }
 </script>

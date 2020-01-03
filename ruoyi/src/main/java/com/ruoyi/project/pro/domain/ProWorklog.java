@@ -28,7 +28,7 @@ public class ProWorklog extends BaseEntity
 
     /** 项目名称 */
     @Excel(name = "项目名称")
-    private String pronum;
+    private String proNum;
 
     public void setWorklogId(Long worklogId)
     {
@@ -58,12 +58,12 @@ public class ProWorklog extends BaseEntity
         return fileurl;
     }
 
-    public String getPronum() {
-        return pronum;
+    public String getProNum() {
+        return proNum;
     }
 
-    public void setPronum(String pronum) {
-        this.pronum = pronum;
+    public void setProNum(String proNum) {
+        this.proNum = proNum;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class ProWorklog extends BaseEntity
             .append("worklogId", getWorklogId())
             .append("worklogTitle", getWorklogTitle())
             .append("fileurl", getFileurl())
-            .append("proname", getPronum())
+            .append("proname", getProNum())
             .toString();
     }
 }

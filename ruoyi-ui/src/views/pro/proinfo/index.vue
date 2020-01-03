@@ -184,7 +184,7 @@
       </el-col>
 
     </el-row>
-    <el-table v-loading="loading" :data="proinfoList" @selection-change="handleSelectionChange">
+    <el-table  v-loading="loading" :data="proinfoList" @selection-change="handleSelectionChange">
       <!--项目详细-->
       <el-table-column type="expand">
         <template slot-scope="scope">
