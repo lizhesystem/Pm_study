@@ -1,32 +1,32 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="20">
+    <el-row :gutter="24">
       <!--部门数据-->
-      <el-col :span="4" :xs="24">
-        <div class="head-container">
-          <el-input
-            v-model="deptName"
-            placeholder="请输入部门名称"
-            clearable
-            size="small"
-            prefix-icon="el-icon-search"
-            style="margin-bottom: 20px"
-          />
-        </div>
-        <div class="head-container">
-          <el-tree
-            :data="deptOptions"
-            :props="defaultProps"
-            :expand-on-click-node="false"
-            :filter-node-method="filterNode"
-            ref="tree"
-            default-expand-all
-            @node-click="handleNodeClick"
-          />
-        </div>
-      </el-col>
+      <!--<el-col :span="4" :xs="24">-->
+      <!--  <div class="head-container">-->
+      <!--    <el-input-->
+      <!--      v-model="deptName"-->
+      <!--      placeholder="请输入部门名称"-->
+      <!--      clearable-->
+      <!--      size="small"-->
+      <!--      prefix-icon="el-icon-search"-->
+      <!--      style="margin-bottom: 20px"-->
+      <!--    />-->
+      <!--  </div>-->
+      <!--  <div class="head-container">-->
+      <!--    <el-tree-->
+      <!--      :data="deptOptions"-->
+      <!--      :props="defaultProps"-->
+      <!--      :expand-on-click-node="false"-->
+      <!--      :filter-node-method="filterNode"-->
+      <!--      ref="tree"-->
+      <!--      default-expand-all-->
+      <!--      @node-click="handleNodeClick"-->
+      <!--    />-->
+      <!--  </div>-->
+      <!--</el-col>-->
       <!--用户数据-->
-      <el-col :span="20" :xs="24">
+      <el-col :span="24" :xs="24">
         <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
           <el-form-item label="用户名称" prop="userName">
             <el-input
@@ -94,13 +94,31 @@
           </el-col>
           <el-col :span="1.5">
             <el-button
-              type="success"
+              type="primary"
               icon="el-icon-edit"
               size="mini"
               :disabled="single"
               @click="handleUpdate"
               v-hasPermi="['system:user:edit']"
             >修改</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              icon="el-icon-download"
+              size="mini"
+              @click="handleImport"
+              v-hasPermi="['system:user:import']"
+            >导入</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              icon="el-icon-upload2"
+              size="mini"
+              @click="handleExport"
+              v-hasPermi="['system:user:export']"
+            >导出</el-button>
           </el-col>
           <el-col :span="1.5">
             <el-button
@@ -111,24 +129,6 @@
               @click="handleDelete"
               v-hasPermi="['system:user:remove']"
             >删除</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button
-              type="info"
-              icon="el-icon-upload2"
-              size="mini"
-              @click="handleImport"
-              v-hasPermi="['system:user:import']"
-            >导入</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button
-              type="warning"
-              icon="el-icon-download"
-              size="mini"
-              @click="handleExport"
-              v-hasPermi="['system:user:export']"
-            >导出</el-button>
           </el-col>
         </el-row>
         <!--用户信息查询列表-->
@@ -198,7 +198,7 @@
     </el-row>
 
     <!-- 添加或修改参数配置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px">
+    <el-dialog :title="title" :visible.sync="open" width="600px" center>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
@@ -217,7 +217,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="邮箱" prop="email">
+            <el-form-item label="用户邮箱" prop="email">
               <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
             </el-form-item>
           </el-col>
@@ -243,31 +243,19 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="状态">
-              <el-radio-group v-model="form.status">
-                <el-radio
-                  v-for="dict in statusOptions"
-                  :key="dict.dictValue"
-                  :label="dict.dictValue"
-                >{{dict.dictLabel}}</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="岗位">
-              <el-select v-model="form.postIds" multiple placeholder="请选择">
-                <el-option
-                  v-for="item in postOptions"
-                  :key="item.postId"
-                  :label="item.postName"
-                  :value="item.postId"
-                  :disabled="item.status == 1"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
+          <!--<el-col :span="12">-->
+          <!--  <el-form-item label="岗位">-->
+          <!--    <el-select v-model="form.postIds" multiple placeholder="请选择">-->
+          <!--      <el-option-->
+          <!--        v-for="item in postOptions"-->
+          <!--        :key="item.postId"-->
+          <!--        :label="item.postName"-->
+          <!--        :value="item.postId"-->
+          <!--        :disabled="item.status == 1"-->
+          <!--      ></el-option>-->
+          <!--    </el-select>-->
+          <!--  </el-form-item>-->
+          <!--</el-col>-->
           <el-col :span="12">
             <el-form-item label="角色">
               <el-select v-model="form.roleIds" multiple placeholder="请选择">
@@ -279,6 +267,17 @@
                   :disabled="item.status == 1"
                 ></el-option>
               </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="状态">
+              <el-radio-group v-model="form.status">
+                <el-radio
+                  v-for="dict in statusOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictValue"
+                >{{dict.dictLabel}}</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="24">

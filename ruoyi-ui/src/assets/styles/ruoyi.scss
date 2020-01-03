@@ -138,7 +138,7 @@
 	padding-left: 15px;
 	margin-bottom: 10px;
 }
-  
+
 /* text color */
 .text-navy {
 	color: #1ab394;
@@ -188,3 +188,6 @@
 	box-shadow: 0 0 4px #ccc;
 	overflow: hidden;
 }
+ .el-dialog--center .el-dialog__body {
+   padding-bottom: 0;
+ }
