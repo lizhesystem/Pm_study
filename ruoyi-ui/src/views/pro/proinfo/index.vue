@@ -190,29 +190,81 @@
         <template slot-scope="scope">
           <el-row justify="center">
             <el-col :span="6">
-
-                    <div>name:lizheaaaaaaaaaaaaaaaaaaaaaaa</div>
-                    <div>age:aaaaaaaaaaaaaaaaa</div>
-
+              <el-alert
+                title="客户联系人信息:"
+                type="warning"
+                :closable="false">
+              </el-alert>
+              <div>
+                <ul class="list-group list-group-striped">
+                  <li class="list-group-item">
+                    <svg-icon icon-class="tool"/>&nbsp;&nbsp;项目运营平台
+                    <div class="pull-right">{{ scope.row.operator }}</div>
+                  </li>
+                  <li class="list-group-item">
+                    <svg-icon icon-class="user"/>&nbsp;&nbsp;客户联系人姓名
+                    <div class="pull-right">{{ scope.row.custname }}</div>
+                  </li>
+                  <li class="list-group-item">
+                    <svg-icon icon-class="phone"/>&nbsp;&nbsp;客户联系电话
+                    <div class="pull-right">{{ scope.row.custphone }}</div>
+                  </li>
+                  <li class="list-group-item">
+                    <svg-icon icon-class="email"/>&nbsp;&nbsp;客户邮箱地址
+                    <div class="pull-right">{{ scope.row.custemail }}</div>
+                  </li>
+                  <li class="list-group-item">
+                    <svg-icon icon-class="date"/>&nbsp;&nbsp;创建日期
+                    <div class="pull-right">{{ scope.row.createTime }}</div>
+                  </li>
+                </ul>
+              </div>
             </el-col>
-            <el-col :span="3">
 
-              <el-timeline>
+            <el-col :offset="2" :span="6">
+              <el-alert class="el-alert"
+                title="项目详细信息:"
+                type="warning"
+                :closable="false">
+              </el-alert>
+              <div>
+                <ul class="list-group list-group-striped">
+                  <li class="list-group-item">
+                    <svg-icon icon-class="tree"/>&nbsp;&nbsp;交易模式
+                    <div class="pull-right">{{ scope.row.tradeMode }}</div>
+                  </li>
+                  <li class="list-group-item">
+                    <svg-icon icon-class="validCode"/>&nbsp;&nbsp;银行接口
+                    <div class="pull-right">{{ scope.row.bankId }}</div>
+                  </li>
+                  <li class="list-group-item">
+                    <svg-icon icon-class="user"/>&nbsp;&nbsp;部署人员
+                    <div class="pull-right">{{ scope.row.insetallName }}</div>
+                  </li>
+                  <li class="list-group-item">
+                    <svg-icon icon-class="user"/>&nbsp;&nbsp;培训人员
+                    <div class="pull-right">{{ scope.row.trainName }}</div>
+                  </li>
+                  <li class="list-group-item">
+                    <svg-icon icon-class="documentation"/>&nbsp;&nbsp;备注信息
+                    <div class="remark">{{ scope.row.remark }}</div>
+                  </li>
+                </ul>
+              </div>
+            </el-col>
+
+            <el-col :offset="2" :span="6">
+              <el-timeline class="timeline">
                 <el-timeline-item
-                  v-for="(activity, index) in activities"
+                  v-for="(activity, index) in activities(scope.row)"
                   :key="index"
-                  :icon="activity.icon"
                   :type="activity.type"
                   :color="activity.color"
-                  :size="activity.size"
                   :timestamp="activity.timestamp">
                   {{activity.content}}
                 </el-timeline-item>
               </el-timeline>
             </el-col>
-          </el-row>
-          <el-row>
-
           </el-row>
         </template>
       </el-table-column>
@@ -480,26 +532,8 @@
   export default {
     data() {
       return {
-        activities: [{
-          content: '支持使用图标',
-          timestamp: '2018-04-12 20:46',
-          size: 'large',
-          type: 'primary',
-          icon: 'el-icon-more'
-        }, {
-          content: '支持自定义颜色',
-          timestamp: '2018-04-03 20:46',
-          color: '#0bbd87'
-        }, {
-          content: '支持自定义尺寸',
-          timestamp: '2018-04-03 20:46',
-          size: 'large'
-        }, {
-          content: '默认样式的节点',
-          timestamp: '2018-04-03 20:46'
-        }],
-
-
+        // 时间轴
+        // activities: [],
         // 查询条件是否展开
         boxShow: false,
         // 遮罩层
@@ -528,7 +562,6 @@
         title: '',
         // 是否显示弹出层
         open: false,
-        nickName: '',
         // 处理tradeMode
         tradeModeFormat: '',
         // 处理bankID
@@ -689,7 +722,7 @@
         getProinfo(proId).then(response => {
           this.form = response.data
           // 处理交易模式和银行编号,如果去掉交易模式默认状态是0
-          if (this.form.tradeMode !== null && this.form.tradeMode !== '' ) {
+          if (this.form.tradeMode !== null && this.form.tradeMode !== '') {
             this.tradeModeSelect = this.form.tradeMode.split(',')
           } else {
             this.tradeModeSelect = []
@@ -762,6 +795,26 @@
           this.download(response.msg)
         }).catch(function() {
         })
+      },
+      // 时间线处理
+      activities(rows) {
+        let proTimeLine = []
+        if (rows.insetallTime !== null && rows.insetallTime !== '') {
+          proTimeLine.push({ 'content': '项目部署时间', 'timestamp': rows.insetallTime,'color': "#BAE7FF"})
+        }
+        if (rows.trainTime !== null && rows.trainTime !== '') {
+          proTimeLine.push({ 'content': '项目培训时间', 'timestamp': rows.trainTime,'color': "#69C0FF" })
+        }
+        if(rows.businessTime !== null && rows.businessTime !== ''){
+          proTimeLine.push({ 'content': '项目上线时间', 'timestamp': rows.businessTime,'color': "#1890FF" })
+        }
+        if(rows.acceptanceTime !== null && rows.acceptanceTime !== ''){
+          proTimeLine.push({ 'content': '项目验收时间', 'timestamp': rows.acceptanceTime,'type': 'success' })
+        }
+        if(rows.terminationTime !== null && rows.terminationTime !== ''){
+          proTimeLine.push({ 'content': '项目终止时间', 'timestamp': rows.terminationTime,'type': 'info' })
+        }
+        return proTimeLine
       }
     },
     computed: {},
@@ -774,13 +827,15 @@
       bankIdFormat() {
         this.queryParams.bankId = this.bankIdFormat.join(',')
       },
+      // 处理交易模式
       tradeModeSelect() {
         if (this.tradeModeSelect.length !== 0) {
           this.form.tradeMode = this.tradeModeSelect.join(',')
         }
       },
+      // 处理银行接口
       bankIdSelect() {
-        if (this.bankIdSelect.length !==0 ) {
+        if (this.bankIdSelect.length !== 0) {
           this.form.bankId = this.bankIdSelect.join(',')
         }
       }
@@ -799,5 +854,17 @@
     transition: all .5s ease;
     opacity: 0;
     max-height: 0;
+  }
+
+  .timeline {
+    margin-top: 20px;
+  }
+  .remark{
+    padding-top: 20px;
+  }
+  .el-alert{
+    font-weight: 700;
+    color: #606266;
+    background-color: #F0F2F5;
   }
 </style>

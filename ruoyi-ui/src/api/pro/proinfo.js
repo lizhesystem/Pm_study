@@ -17,6 +17,16 @@ export function getProinfo(proId) {
   })
 }
 
+// 查询所有项目名称字典
+export function getProdict(query) {
+  return request({
+    url: '/pro/proinfo/allList',
+    method: 'get',
+    params: query
+  })
+}
+
+
 // 新增项目列
 export function addProinfo(data) {
   return request({

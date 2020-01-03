@@ -71,12 +71,12 @@ export default {
       title: "修改头像",
       options: {
         img: store.getters.avatar, //裁剪图片的地址
-        autoCrop: true, // 是否默认生成截图框
+        autoCrop: true, // 是否默认生成action截图框
         autoCropWidth: 200, // 默认生成截图框宽度
         autoCropHeight: 200, // 默认生成截图框高度
         fixedBox: true // 固定截图框大小 不允许改变
       },
-      previews: {}
+      previews: {},
     };
   },
   methods: {

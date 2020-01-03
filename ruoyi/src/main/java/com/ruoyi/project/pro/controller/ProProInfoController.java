@@ -5,6 +5,7 @@ import java.util.List;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.project.pro.domain.ProDict;
 import com.ruoyi.project.pro.domain.ProInfo;
 import com.ruoyi.project.pro.service.IProProinfoService;
 import com.ruoyi.project.system.service.ISysUserService;
@@ -81,7 +82,7 @@ public class ProProInfoController extends BaseController {
     @Log(title = "项目列表", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody ProInfo proInfo) {
-        if(UserConstants.NOT_UNIQUE.equals(proProinfoService.selectProProInfoByNum(proInfo.getProNum()))){
+        if (UserConstants.NOT_UNIQUE.equals(proProinfoService.selectProProInfoByNum(proInfo.getProNum()))) {
             return AjaxResult.error("项目编号'" + proInfo.getProNum() + "'已存在,请重新录入。");
         }
         if (!UserConstants.NOT_UNIQUE.equals(sysUserService.checkNickNameUnique(proInfo.getWorkName()))) {
@@ -130,4 +131,18 @@ public class ProProInfoController extends BaseController {
     public AjaxResult remove(@PathVariable Long[] proIds) {
         return toAjax(proProinfoService.deleteProProinfoByIds(proIds));
     }
+
+
+    /**
+     * 获取所有项目编号名称
+     *
+     * @return 结果:所有的项目编号和名称
+     */
+    @GetMapping("/allList")
+    public AjaxResult getAllProList() {
+        List<ProDict> proDicts = proProinfoService.selectProNameList();
+        return AjaxResult.success(proDicts);
+    }
+
+
 }

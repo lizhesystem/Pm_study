@@ -180,4 +180,8 @@
     <select id="selectProProInfoByNum" parameterType="String" resultType="int">
 		select count(1) from pro_proinfo where pro_num = #{proNum}
 	</select>
+
+    <select id="selectProNameList" resultMap="ProProinfoResult">
+        select pro_num,pro_name from pro_proinfo where pro_status != 2
+    </select>
 </mapper>

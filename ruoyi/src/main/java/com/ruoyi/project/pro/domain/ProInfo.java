@@ -10,11 +10,12 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 项目列对象 pro_proinfo
  *
- * @author ruoyi
+ * @author lizhe
  * @date 2019-12-28
  */
 public class ProInfo extends BaseEntity {
@@ -46,13 +47,13 @@ public class ProInfo extends BaseEntity {
     /**
      * 项目交易模式：根据字典表获取
      */
-    @Excel(name = "项目交易模式：根据字典表获取")
+    @Excel(name = "项目交易模式")
     private String tradeMode;
 
     /**
      * 银行编号：根据字典获取
      */
-    @Excel(name = "银行编号：根据字典获取")
+    @Excel(name = "银行编号")
     private String bankId;
     /**
      * 客户联系人姓名
@@ -314,6 +315,8 @@ public class ProInfo extends BaseEntity {
     public void setAcceptanceTime(Date acceptanceTime) {
         this.acceptanceTime = acceptanceTime;
     }
+
+
 
     @Override
     public String toString() {

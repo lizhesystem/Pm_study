@@ -1,5 +1,6 @@
 package com.ruoyi.project.pro.service;
 
+import com.ruoyi.project.pro.domain.ProDict;
 import com.ruoyi.project.pro.domain.ProInfo;
 import java.util.List;
 
@@ -67,4 +68,9 @@ public interface IProProinfoService
     String selectProProInfoByNum(String proNum);
 
 
+    /**
+     *  查询所有项目信息
+     * @return
+     */
+    List<ProDict> selectProNameList();
 }

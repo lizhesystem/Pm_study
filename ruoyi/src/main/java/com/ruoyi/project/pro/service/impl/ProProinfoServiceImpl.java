@@ -1,10 +1,13 @@
 package com.ruoyi.project.pro.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.project.pro.domain.ProDict;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.pro.mapper.ProProinfoMapper;
@@ -89,19 +92,35 @@ public class ProProinfoServiceImpl implements IProProinfoService {
     }
 
     /**
-     *  根据项目编号查询项目编号是否已存在
+     * 根据项目编号查询项目编号是否已存在
+     *
      * @param proNum
      * @return
      */
     @Override
     public String selectProProInfoByNum(String proNum) {
-        int count =  proProinfoMapper.selectProProInfoByNum(proNum);
-        if(count != 0){
+        int count = proProinfoMapper.selectProProInfoByNum(proNum);
+        if (count != 0) {
             return UserConstants.NOT_UNIQUE;
         }
         return UserConstants.UNIQUE;
     }
 
+    /**
+     * 查到的项目信息封装到ProDict对象
+     * @return
+     */
+    @Override
+    public List<ProDict> selectProNameList() {
+        List<ProInfo> proInfos = proProinfoMapper.selectProNameList();
+        // 把查到的结果封装到ProDict对象
+        return proInfos.stream().map(pro -> {
+            ProDict proDict = new ProDict();
+            proDict.setProNum(pro.getProNum());
+            proDict.setProName(pro.getProName());
+            return proDict;
+        }).collect(Collectors.toList());
+    }
 
 
 }

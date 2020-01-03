@@ -65,4 +65,10 @@ public interface ProProinfoMapper {
      * @return
      */
     int selectProProInfoByNum(String proNum);
+
+    /**
+     *  查询所有项目信息
+     * @return
+     */
+    List<ProInfo> selectProNameList();
 }

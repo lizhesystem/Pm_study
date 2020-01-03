@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.pro.mapper.ProWorklogMapper">
+
+    <resultMap type="ProWorklog" id="ProWorklogResult">
+        <result property="worklogId"    column="worklog_id"    />
+        <result property="worklogTitle"    column="worklog_title"    />
+        <result property="fileurl"    column="fileurl"    />
+        <result property="pronum"    column="pro_num"    />
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectProWorklogVo">
+        select worklog_id, worklog_title, fileurl, pro_num,create_by,create_time from pro_worklog
+    </sql>
+
+    <select id="selectProWorklogList" parameterType="ProWorklog" resultMap="ProWorklogResult">
+        <include refid="selectProWorklogVo"/>
+        <where>
+            <if test="worklogTitle != null  and worklogTitle != ''"> and worklog_title = #{worklogTitle}</if>
+            <if test="fileurl != null  and fileurl != ''"> and fileurl = #{fileurl}</if>
+            <if test="pronum != null  and pronum != ''"> and pro_num like concat('%', #{pronum}, '%')</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(create_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectProWorklogById" parameterType="Long" resultMap="ProWorklogResult">
+        <include refid="selectProWorklogVo"/>
+        where worklog_id = #{worklogId}
+    </select>
+
+    <insert id="insertProWorklog" parameterType="ProWorklog" useGeneratedKeys="true" keyProperty="worklogId">
+        insert into pro_worklog
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="worklogTitle != null  and worklogTitle != ''">worklog_title,</if>
+            <if test="fileurl != null  and fileurl != ''">fileurl,</if>
+            <if test="pronum != null  and pronum != ''">pro_num,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="worklogTitle != null  and worklogTitle != ''">#{worklogTitle},</if>
+            <if test="fileurl != null  and fileurl != ''">#{fileurl},</if>
+            <if test="pronum != null  and pronum != ''">#{pronum},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProWorklog" parameterType="ProWorklog">
+        update pro_worklog
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="worklogTitle != null  and worklogTitle != ''">worklog_title = #{worklogTitle},</if>
+            <if test="fileurl != null  and fileurl != ''">fileurl = #{fileurl},</if>
+            <if test="pronum != null  and pronum != ''">pronum = #{pro_num},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where worklog_id = #{worklogId}
+    </update>
+
+    <delete id="deleteProWorklogById" parameterType="Long">
+        delete from pro_worklog where worklog_id = #{worklogId}
+    </delete>
+
+    <delete id="deleteProWorklogByIds" parameterType="String">
+        delete from pro_worklog where worklog_id in
+        <foreach item="worklogId" collection="array" open="(" separator="," close=")">
+            #{worklogId}
+        </foreach>
+    </delete>
+
+</mapper>
