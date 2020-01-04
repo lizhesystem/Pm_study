@@ -1,13 +1,20 @@
 package com.ruoyi.project.pro.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.framework.config.RuoYiConfig;
 import com.ruoyi.framework.security.service.TokenService;
+import com.ruoyi.project.common.CommonController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +28,9 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.web.page.TableDataInfo;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 日报Controller
  *
@@ -33,6 +43,7 @@ public class ProWorklogController extends BaseController {
     @Autowired
     private IProWorklogService proWorklogService;
 
+    private static final Logger log = LoggerFactory.getLogger(CommonController.class);
 
     /**
      * 查询日报列表
@@ -99,19 +110,52 @@ public class ProWorklogController extends BaseController {
         return toAjax(proWorklogService.deleteProWorklogByIds(worklogIds));
     }
 
-
     /**
      * 文件
      */
-    @Log(title = "上传日报", businessType = BusinessType.UPDATE)
-    @PostMapping("/workFile")
-    public AjaxResult avatar(MultipartFile file) throws IOException {
-        if (!file.isEmpty()) {
-            String url = FileUploadUtils.upload(RuoYiConfig.getAvatarPath(), file);
-            AjaxResult ajax = AjaxResult.success();
-            ajax.put("fileUrl", url);
-            return ajax;
+    //@Log(title = "上传日报", businessType = BusinessType.UPDATE)
+    //@PostMapping("/workFile")
+    //public AjaxResult avatar(MultipartFile file) throws IOException {
+    //    if (!file.isEmpty()) {
+    //        String url = FileUploadUtils.upload(RuoYiConfig.getAvatarPath(), file);
+    //        AjaxResult ajax = AjaxResult.success();
+    //        ajax.put("fileUrl", url);
+    //        return ajax;
+    //    }
+    //    return AjaxResult.error("上传图片异常，请联系管理员");
+    //}
+    @Log(title = "下载日报", businessType = BusinessType.EXPORT)
+    @GetMapping("/downFile")
+    public void download(HttpServletResponse response, String fileurl) {
+        try {
+            String profile = RuoYiConfig.getProfile();
+
+            File file = new File(profile + fileurl.substring(8));
+            // 如果文件存在
+            if (file.exists()) {
+                String fileName = fileurl.substring(fileurl.lastIndexOf("/") + 1);
+
+                //设置相应类型让浏览器知道用什么打开  用application/octet-stream也可以，看是什么浏览器
+                response.setContentType("application/octet-stream");
+                response.setCharacterEncoding("utf-8");
+                //设置头信息
+                response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName + "\"");
+                InputStream inputStream = new FileInputStream(file);
+                ServletOutputStream ouputStream = response.getOutputStream();
+                byte b[] = new byte[1024];
+                int n;
+                while ((n = inputStream.read(b)) != -1) {
+                    ouputStream.write(b, 0, n);
+                }
+                //关闭流
+                ouputStream.close();
+                inputStream.close();
+            }
+        } catch (Exception e) {
+            log.error("下载文件失败", e);
         }
-        return AjaxResult.error("上传图片异常，请联系管理员");
+
+
+        //return AjaxResult.error("下载日报异常，请联系管理员");
     }
 }

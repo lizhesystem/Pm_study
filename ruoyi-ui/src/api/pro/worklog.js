@@ -51,3 +51,12 @@ export function exportWorklog(query) {
     params: query
   })
 }
+
+// 下载日报
+export function downLoad(query) {
+  return request({
+    url: '/pro/worklog/downFile',
+    method: 'get',
+    params: query
+  })
+}

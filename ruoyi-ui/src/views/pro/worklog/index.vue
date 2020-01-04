@@ -1,18 +1,20 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="项目名称" prop="fileurl">
-        <el-input
-          v-model="queryParams.fileurl"
-          placeholder="请输入项目名称"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="项目编号" prop="pronum">
+        <el-select v-model="queryParams.proNum" placeholder="请选择项目编号" filterable clearable>
+          <el-option
+            v-for="(item,index) in proInfoDict"
+            :key="index"
+            :value="item.proNum">
+            <span style="float: left">{{ item.proNum }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.proName }}</span>
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item label="上传用户" prop="pronum">
+      <el-form-item label="上传用户" prop="createBy">
         <el-input
-          v-model="queryParams.pronum"
+          v-model="queryParams.createBy"
           placeholder="请输入上传用户"
           clearable
           size="small"
@@ -46,17 +48,17 @@
         >日报上传
         </el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['pro:worklog:edit']"
-        >修改
-        </el-button>
-      </el-col>
+      <!--<el-col :span="1.5">-->
+      <!--  <el-button-->
+      <!--    type="primary"-->
+      <!--    icon="el-icon-edit"-->
+      <!--    size="mini"-->
+      <!--    :disabled="single"-->
+      <!--    @click="handleUpdate"-->
+      <!--    v-hasPermi="['pro:worklog:edit']"-->
+      <!--  >修改-->
+      <!--  </el-button>-->
+      <!--</el-col>-->
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -88,23 +90,24 @@
           <span>{{  parseTime(scope.row.createTime)  }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="上传用户" align="center" prop="createBy" width="160"/>
       <el-table-column label="日报标题" align="center" prop="worklogTitle"/>
-      <el-table-column label="项目名称" align="center" prop="proNum" >
+      <el-table-column label="项目名称" align="center" prop="proNum">
         <template slot-scope="scope">
           <span>{{ getFullProName(scope.row.proNum)  }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="附件下载" align="center" prop="fileurl" :formatter="formatUrl" />
+      <el-table-column label="附件下载" align="center" prop="fileurl"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-download"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['pro:worklog:edit']"
-          >修改
-          </el-button>
+          <!--<el-button-->
+          <!--  size="mini"-->
+          <!--  type="text"-->
+          <!--  icon="el-icon-download"-->
+          <!--  @click="handleUpdate(scope.row)"-->
+          <!--  v-hasPermi="['pro:worklog:edit']"-->
+          <!--&gt;修改-->
+          <!--</el-button>-->
           <el-button
             size="mini"
             type="text"
@@ -112,6 +115,14 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['pro:worklog:remove']"
           >删除
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-download"
+            @click="handDownload(scope.row)"
+            v-hasPermi="['pro:worklog:down']"
+          >下载
           </el-button>
         </template>
       </el-table-column>
@@ -158,7 +169,7 @@
           >
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-            <div class="el-upload__tip" slot="tip">只能上传word文件，且不超过500kb</div>
+            <div class="el-upload__tip" slot="tip">只能上传word文件</div>
           </el-upload>
         </el-form-item>
       </el-form>
@@ -171,15 +182,22 @@
 </template>
 
 <script>
-  import { listWorklog, getWorklog, delWorklog, addWorklog, updateWorklog, exportWorklog } from '@/api/pro/worklog'
+  import {
+    listWorklog,
+    getWorklog,
+    delWorklog,
+    addWorklog,
+    updateWorklog,
+    exportWorklog,
+  } from '@/api/pro/worklog'
   import { getProdict } from '@/api/pro/proinfo'
   import { getToken } from '@/utils/auth'
+  import { downLoadFile } from '../../../utils/zipdownload'
 
   export default {
     data() {
       return {
         // 项目名称字典
-        // proDict: [],
         proInfoDict: [],
         // 遮罩层
         loading: true,
@@ -214,7 +232,7 @@
           // 设置上传的请求头部
           headers: { Authorization: 'Bearer ' + getToken() },
           // 上传的地址
-          url: process.env.VUE_APP_BASE_API + '/pro/worklog/workFile'
+          url: process.env.VUE_APP_BASE_API + '/common/upload'
         },
         // 日期范围
         dateRange: [],
@@ -281,14 +299,19 @@
         this.title = '添加日报'
       },
       /** 修改按钮操作 */
-      handleUpdate(row) {
-        this.reset()
-        const worklogId = row.worklogId || this.ids
-        getWorklog(worklogId).then(response => {
-          this.form = response.data
-          this.open = true
-          this.title = '修改日报'
-        })
+      // handleUpdate(row) {
+      //   this.reset()
+      //   const worklogId = row.worklogId || this.ids
+      //   getWorklog(worklogId).then(response => {
+      //     this.form = response.data
+      //     this.open = true
+      //     this.title = '修改日报'
+      //   })
+      // },
+      /* 下载文件按钮*/
+      handDownload(row) {
+        const url = row.fileurl
+        downLoadFile('/pro/worklog/downFile?fileurl=' + url, this.getFullProName(row.proNum), row)
       },
       /** 提交按钮 */
       submitForm: function() {
@@ -365,18 +388,20 @@
       // 文件上传成功处理
       handleFileSuccess(response, file, fileList) {
         // 文件路径封装到form里
-        this.form.fileurl = response.fileUrl
+        this.form.fileurl = response.fileName
         this.upload.isUploading = false
+        this.$refs.upload.clearFiles();
       },
       // 获取项目全称
       getFullProName(proNum) {
-        let proInfo = this.proInfoDict.filter(pro => {
-          return pro.proNum === proNum
-        })
-        return proNum + '' +proInfo[0].proName
-      },
-      formatUrl(row, column, cellValue, index){
-        return "<a>123   </a>"
+        try {
+          let proInfo = this.proInfoDict.filter(pro => {
+            return pro.proNum === proNum
+          })
+          return proNum + proInfo[0].proName
+        } catch (e) {
+
+        }
       }
     },
     computed: {}

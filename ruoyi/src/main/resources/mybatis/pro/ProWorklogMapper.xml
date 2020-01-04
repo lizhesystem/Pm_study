@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="worklogTitle != null  and worklogTitle != ''"> and worklog_title = #{worklogTitle}</if>
             <if test="fileurl != null  and fileurl != ''"> and fileurl = #{fileurl}</if>
-            <if test="proNum != null  and proNum != ''"> and pro_num like concat('%', #{proNum}, '%')</if>
+            <if test="proNum != null  and proNum != ''"> and pro_num = #{proNum}</if>
             <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
             <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(create_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
