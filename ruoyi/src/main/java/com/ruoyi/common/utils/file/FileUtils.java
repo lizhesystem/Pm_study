@@ -137,6 +137,6 @@ public class FileUtils
             // 其它浏览器
             filename = URLEncoder.encode(filename, "utf-8");
         }
-        return filename + "xxxxx";
+        return filename;
     }
 }

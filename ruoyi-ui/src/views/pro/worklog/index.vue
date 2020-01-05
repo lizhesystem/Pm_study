@@ -70,34 +70,34 @@
         >删除
         </el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['pro:worklog:export']"
-        >导出
-        </el-button>
-      </el-col>
+      <!--<el-col :span="1.5">-->
+      <!--  <el-button-->
+      <!--    type="primary"-->
+      <!--    icon="el-icon-download"-->
+      <!--    size="mini"-->
+      <!--    @click="handleExport"-->
+      <!--    v-hasPermi="['pro:worklog:export']"-->
+      <!--  >导出-->
+      <!--  </el-button>-->
+      <!--</el-col>-->
     </el-row>
 
     <el-table v-loading="loading" border :data="worklogList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="序列" width="70" align="center" prop="worklogId"/>
+      <el-table-column type="index" label="序列" width="70" align="center"/>
       <el-table-column label="创建时间" align="center" prop="createTime" width="160">
         <template slot-scope="scope">
           <span>{{  parseTime(scope.row.createTime)  }}</span>
         </template>
       </el-table-column>
       <el-table-column label="上传用户" align="center" prop="createBy" width="160"/>
-      <el-table-column label="日报标题" align="center" prop="worklogTitle"/>
+      <el-table-column label="日报问题描述" align="center" prop="worklogTitle"/>
       <el-table-column label="项目名称" align="center" prop="proNum">
         <template slot-scope="scope">
           <span>{{ getFullProName(scope.row.proNum)  }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="附件下载" align="center" prop="fileurl"/>
+      <el-table-column label="附件路径" align="center" prop="fileurl"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!--<el-button-->
@@ -121,7 +121,7 @@
             type="text"
             icon="el-icon-download"
             @click="handDownload(scope.row)"
-            v-hasPermi="['pro:worklog:down']"
+            v-hasPermi="['pro:worklog:export']"
           >下载
           </el-button>
         </template>
@@ -139,7 +139,7 @@
     <!-- 添加或修改日报对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="日报标题" prop="worklogTitle">
+        <el-form-item label="问题描述" prop="worklogTitle">
           <el-input v-model="form.worklogTitle" placeholder="请输入日报标题"/>
         </el-form-item>
         <el-form-item label="项目名称" prop="proNum">
@@ -166,10 +166,19 @@
             :multiple="false"
             :on-progress="handleFileUploadProgress"
             :on-success="handleFileSuccess"
+            ref="my-upload"
           >
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-            <div class="el-upload__tip" slot="tip">只能上传word文件</div>
+
+            <div class="el-upload__tip" slot="tip">
+              <el-alert
+                title="请确保上传文件正确！"
+                type="warning"
+                :closable="false"
+                show-icon>
+              </el-alert>
+            </div>
           </el-upload>
         </el-form-item>
       </el-form>
@@ -184,11 +193,10 @@
 <script>
   import {
     listWorklog,
-    getWorklog,
     delWorklog,
     addWorklog,
     updateWorklog,
-    exportWorklog,
+    exportWorklog
   } from '@/api/pro/worklog'
   import { getProdict } from '@/api/pro/proinfo'
   import { getToken } from '@/utils/auth'
@@ -265,6 +273,7 @@
       cancel() {
         this.open = false
         this.reset()
+        this.clearFiles()
       },
       // 表单重置
       reset() {
@@ -349,7 +358,7 @@
       /** 删除按钮操作 */
       handleDelete(row) {
         const worklogIds = row.worklogId || this.ids
-        this.$confirm('是否确认删除日报编号为"' + worklogIds + '"的数据项?', '警告', {
+        this.$confirm('是否确认删除该日报数据项?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -362,19 +371,19 @@
         })
       },
       /** 导出按钮操作 */
-      handleExport() {
-        const queryParams = this.queryParams
-        this.$confirm('是否确认导出所有日报数据项?', '警告', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(function() {
-          return exportWorklog(queryParams)
-        }).then(response => {
-          this.download(response.msg)
-        }).catch(function() {
-        })
-      },
+      // handleExport() {
+      //   const queryParams = this.queryParams
+      //   this.$confirm('是否确认导出所有日报数据项?', '警告', {
+      //     confirmButtonText: '确定',
+      //     cancelButtonText: '取消',
+      //     type: 'warning'
+      //   }).then(function() {
+      //     return exportWorklog(queryParams)
+      //   }).then(response => {
+      //     this.download(response.msg)
+      //   }).catch(function() {
+      //   })
+      // },
       /** 获取所有项目名称*/
       getProDict() {
         getProdict().then(responce => {
@@ -390,7 +399,11 @@
         // 文件路径封装到form里
         this.form.fileurl = response.fileName
         this.upload.isUploading = false
-        this.$refs.upload.clearFiles();
+        this.$refs.upload.clearFiles()
+      },
+      // 清空上传的文件
+      clearFiles() {
+        this.$refs['my-upload'].clearFiles()
       },
       // 获取项目全称
       getFullProName(proNum) {

@@ -269,7 +269,7 @@
         </template>
       </el-table-column>
       <el-table-column type="selection" width="50" align="center"/>
-      <el-table-column type="index" label="序列" align-="center"/>
+      <el-table-column type="index" label="序列" align="center"/>
       <!--<el-table-column label="序列" width="50" align="center" type="index"/>-->
       <el-table-column label="项目编号" align="center" prop="proNum"/>
       <el-table-column label="项目名称" align="center" prop="proName"/>

@@ -19,15 +19,12 @@ public class ProWorklog extends BaseEntity
     private Long worklogId;
 
     /** 日报标题 */
-    @Excel(name = "日报标题")
     private String worklogTitle;
 
     /** 日报附件 */
-    @Excel(name = "日报附件")
     private String fileurl;
 
     /** 项目编号 */
-    @Excel(name = "项目编号")
     private String proNum;
 
     public void setWorklogId(Long worklogId)

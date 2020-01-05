@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.pro.mapper.ProKnowledgeMapper">
+
+    <resultMap type="ProKnowledge" id="ProKnowledgeResult">
+        <result property="knowledgeId"    column="knowledge_id"/>
+        <result property="knowledgeTitle"    column="knowledge_title"/>
+        <result property="proNum"    column="pro_num"    />
+        <result property="tradeMode"    column="trade_mode"    />
+        <result property="knowledgeContent"    column="knowledge_content"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <association property="proInfo"    column="pro_num" javaType="ProInfo" resultMap="ProInfoResult" />
+    </resultMap>
+
+    <resultMap id="ProInfoResult" type="ProInfo">
+        <result property="proNum" column="pro_num"/>
+        <result property="proName" column="pro_name"/>
+    </resultMap>
+
+    <sql id="selectProKnowledgeVo">
+        select
+        k.knowledge_id,k.knowledge_title,k.pro_num,k.knowledge_content,k.trade_mode,k.create_by,k.create_time,k.update_by,k.update_time,k.`status`,
+        p.pro_num as num,p.pro_name
+        from pro_knowledge k
+            left join pro_proinfo p on p.pro_num = k.pro_num
+    </sql>
+
+    <select id="selectProKnowledgeList" parameterType="ProKnowledge" resultMap="ProKnowledgeResult">
+        <include refid="selectProKnowledgeVo"/>
+        <where>
+            <if test="knowledgeTitle != null  and knowledgeTitle != ''"> and k.knowledge_title = #{knowledgeTitle}</if>
+            <if test="proNum != null  and proNum != ''"> and k.pro_num = #{proNum}</if>
+            <if test="tradeMode != null  and tradeMode != ''"> and k.trade_mode = #{tradeMode}</if>
+            <if test="status != null  and status != ''"> and k.status = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and k.create_by = #{createBy}</if>
+            <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(k.create_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(k.create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectProKnowledgeById" parameterType="Long" resultMap="ProKnowledgeResult">
+        <include refid="selectProKnowledgeVo"/>
+        where knowledge_id = #{knowledgeId}
+    </select>
+
+    <insert id="insertProKnowledge" parameterType="ProKnowledge" useGeneratedKeys="true" keyProperty="knowledgeId">
+        insert into pro_knowledge
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="knowledgeTitle != null  and knowledgeTitle != ''">knowledge_title,</if>
+            <if test="proNum != null  and proNum != ''">pro_num,</if>
+            <if test="tradeMode != null  and tradeMode != ''">trade_mode,</if>
+            <if test="knowledgeContent != null  and knowledgeContent != ''">knowledge_content,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="knowledgeTitle != null  and knowledgeTitle != ''">#{knowledgeTitle},</if>
+            <if test="proNum != null  and proNum != ''">#{proNum},</if>
+            <if test="tradeMode != null  and tradeMode != ''">#{tradeMode},</if>
+            <if test="knowledgeContent != null  and knowledgeContent != ''">#{knowledgeContent},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProKnowledge" parameterType="ProKnowledge">
+        update pro_knowledge
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="knowledgeTitle != null  and knowledgeTitle != ''">knowledge_title = #{knowledgeTitle},</if>
+            <if test="proNum != null  and proNum != ''">pro_num = #{proNum},</if>
+            <if test="tradeMode != null  and tradeMode != ''">trade_mode = #{tradeMode},</if>
+            <if test="knowledgeContent != null  and knowledgeContent != ''">knowledge_content = #{knowledgeContent},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where knowledge_id = #{knowledgeId}
+    </update>
+
+    <delete id="deleteProKnowledgeById" parameterType="Long">
+        delete from pro_knowledge where knowledge_id = #{knowledgeId}
+    </delete>
+
+    <delete id="deleteProKnowledgeByIds" parameterType="String">
+        delete from pro_knowledge where knowledge_id in
+        <foreach item="knowledgeId" collection="array" open="(" separator="," close=")">
+            #{knowledgeId}
+        </foreach>
+    </delete>
+
+</mapper>
