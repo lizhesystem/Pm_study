@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
-import { parseTime } from '@/utils/ruoyi'
 
 
 const mimeMap = {

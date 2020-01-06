@@ -2,7 +2,7 @@
   "name": "lizhe",
   "version": "1.0.0",
   "description": "管理系统",
-  "author": "李哲",
+  "author": "lizhe",
   "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve",

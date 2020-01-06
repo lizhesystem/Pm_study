@@ -94,12 +94,13 @@
 
     <el-table v-loading="loading" :data="knowledgeList" border  @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="序号" align="center" type="index" width="55" />
+      <el-table-column label="序号" align="center" type="index" width="70" />
       <el-table-column
         label="问题标题"
         align="left"
         prop="knowledgeTitle"
-        width="500"
+        min-width="400"
+
         :show-overflow-tooltip="true"
       >
         <template slot-scope="scope">
@@ -135,7 +136,7 @@
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作"  align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
