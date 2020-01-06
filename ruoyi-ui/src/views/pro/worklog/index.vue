@@ -142,7 +142,7 @@
         <el-form-item label="问题描述" prop="worklogTitle">
           <el-input v-model="form.worklogTitle" placeholder="请输入日报标题"/>
         </el-form-item>
-        <el-form-item label="项目名称" prop="proNum">
+        <el-form-item label="项目编号" prop="proNum">
           <el-select v-model="form.proNum" placeholder="请选择" filterable>
             <el-option
               v-for="(item,index) in proInfoDict"

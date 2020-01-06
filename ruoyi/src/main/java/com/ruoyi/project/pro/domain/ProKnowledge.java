@@ -38,8 +38,8 @@ public class ProKnowledge extends BaseEntity
     @Excel(name = "知识库状态", readConverterExp = "0=正常,1=已过期")
     private String status;
 
-    /** 所属的项目 */
-    private ProInfo proInfo;
+    /** 所属的项目项目编号 */
+    private ProDict proDict;
 
     public void setKnowledgeId(Long knowledgeId)
     {
@@ -96,12 +96,12 @@ public class ProKnowledge extends BaseEntity
         return status;
     }
 
-    public ProInfo getProInfo() {
-        return proInfo;
+    public ProDict getProDict() {
+        return proDict;
     }
 
-    public void setProInfo(ProInfo proInfo) {
-        this.proInfo = proInfo;
+    public void setProDict(ProDict proDict) {
+        this.proDict = proDict;
     }
 
     @Override

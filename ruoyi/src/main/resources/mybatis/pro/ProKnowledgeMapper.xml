@@ -16,10 +16,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="remark"    column="remark"    />
-        <association property="proInfo"    column="pro_num" javaType="ProInfo" resultMap="ProInfoResult" />
+        <association property="proDict"    column="pro_num" javaType="ProDict" resultMap="ProDictResult" />
     </resultMap>
 
-    <resultMap id="ProInfoResult" type="ProInfo">
+    <resultMap id="ProDictResult" type="ProDict">
         <result property="proNum" column="pro_num"/>
         <result property="proName" column="pro_name"/>
     </resultMap>
@@ -35,7 +35,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectProKnowledgeList" parameterType="ProKnowledge" resultMap="ProKnowledgeResult">
         <include refid="selectProKnowledgeVo"/>
         <where>
-            <if test="knowledgeTitle != null  and knowledgeTitle != ''"> and k.knowledge_title = #{knowledgeTitle}</if>
+            <if test="knowledgeTitle != null  and knowledgeTitle != ''">
+                and k.knowledge_title like concat('%', #{knowledgeTitle}, '%')
+             </if>
             <if test="proNum != null  and proNum != ''"> and k.pro_num = #{proNum}</if>
             <if test="tradeMode != null  and tradeMode != ''"> and k.trade_mode = #{tradeMode}</if>
             <if test="status != null  and status != ''"> and k.status = #{status}</if>
@@ -51,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectProKnowledgeById" parameterType="Long" resultMap="ProKnowledgeResult">
         <include refid="selectProKnowledgeVo"/>
-        where knowledge_id = #{knowledgeId}
+        where k.knowledge_id = #{knowledgeId}
     </select>
 
     <insert id="insertProKnowledge" parameterType="ProKnowledge" useGeneratedKeys="true" keyProperty="knowledgeId">

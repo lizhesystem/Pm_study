@@ -95,6 +95,19 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/rep',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'knowledge/data/:knowledgeId(\\d+)',
+        component: () => import('@/views/pro/knowledge/data'),
+        name: 'knowledgeData',
+        meta: { title: '日报浏览', icon: '' }
+      }
+    ]
+  },
+  {
     path: '/gen',
     component: Layout,
     hidden: true,

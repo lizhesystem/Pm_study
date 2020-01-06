@@ -53,7 +53,7 @@ router.beforeEach((to, from, next) => {
       // 在免登录白名单，直接进入
       next()
     } else {
-      // 第一次访问经过路由首位，如果没有token的时候,除了
+      // 第一次访问经过路由守卫，如果没有token的时候,除了
       next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
       NProgress.done()
     }

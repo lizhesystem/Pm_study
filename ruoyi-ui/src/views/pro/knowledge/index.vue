@@ -40,12 +40,11 @@
       </el-form-item>
       <el-form-item label="交易模式" prop="tradeMode">
         <el-select
-          v-model="tradeModeFormat"
+          v-model="queryParams.tradeMode"
           placeholder="请输入交易模式"
           size="small"
           clearable
           filterable
-          multiple
         >
           <el-option
             v-for="dict in tradeModeOptions"
@@ -73,7 +72,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="success"
+          type="primary"
           icon="el-icon-edit"
           size="mini"
           :disabled="single"
@@ -93,18 +92,25 @@
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="knowledgeList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="knowledgeList" border  @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="序号" align="center" type="index" width="70" />
+      <el-table-column label="序号" align="center" type="index" width="55" />
       <el-table-column
         label="问题标题"
-        align="center"
+        align="left"
         prop="knowledgeTitle"
+        width="500"
         :show-overflow-tooltip="true"
-      />
-      <el-table-column label="项目编号" align="center" prop="proNum" />
-      <el-table-column label="项目名称" align="center" prop="proInfo.proName" />
-      <el-table-column label="交易模式" align="center" prop="tradeMode" />
+      >
+        <template slot-scope="scope">
+          <router-link :to="'/rep/knowledge/data/' + scope.row.knowledgeId" class="link-type">
+            <span>{{ scope.row.knowledgeTitle }}</span>
+          </router-link>
+        </template>
+      </el-table-column>
+      <el-table-column label="市场编号" align="center" width="80" prop="proDict.proNum" />
+      <el-table-column label="项目名称" align="center" width="150" prop="proDict.proName" />
+      <el-table-column label="交易模式" align="center" width="80" prop="tradeMode" />
 
       <!--<el-table-column-->
       <!--  label="问题类型"-->
@@ -116,17 +122,20 @@
       <el-table-column
         label="状态"
         align="center"
-        prop="status"
-        :formatter="statusFormat"
-        width="100"
-      />
+        width="80"
+      >
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.status === '1'" type="success">正常</el-tag>
+            <el-tag v-else  type="warning">已过期</el-tag>
+          </template>
+      </el-table-column>
       <el-table-column label="创建者" align="center" prop="createBy" width="100" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作"  align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -158,34 +167,41 @@
     <el-dialog :title="title" :visible.sync="open" width="780px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="标题" prop="knowledgeTitle">
-              <el-input v-model="form.knowledgeTitle" placeholder="请输入标题" />
+          <el-col :span="24">
+            <el-form-item label="问题描述" prop="knowledgeTitle">
+              <el-input v-model="form.knowledgeTitle" placeholder="请输入问题描述" />
             </el-form-item>
           </el-col>
-          <!--<el-col :span="12">-->
-          <!--  <el-form-item label="公告类型" prop="noticeType">-->
-          <!--    <el-select v-model="form.noticeType" placeholder="请选择">-->
-          <!--      <el-option-->
-          <!--        v-for="dict in typeOptions"-->
-          <!--        :key="dict.dictValue"-->
-          <!--        :label="dict.dictLabel"-->
-          <!--        :value="dict.dictValue"-->
-          <!--      ></el-option>-->
-          <!--    </el-select>-->
-          <!--  </el-form-item>-->
-          <!--</el-col>-->
         </el-row>
         <el-row>
-          <el-col :span="12">
-          <el-form-item label="所属项目编号" prop="proNum">
-            <el-input v-model="form.proNum" placeholder="请输入所属项目编号" />
-          </el-form-item>
+          <el-col :span="10">
+            <el-form-item label="项目编号" prop="proNum">
+              <el-select v-model="form.proNum" placeholder="请选择" filterable>
+                <el-option
+                  v-for="(item,index) in proInfoDict"
+                  :key="index"
+                  :label="item.proName"
+                  :value="item.proNum">
+                  <span style="float: left">{{ item.proNum }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.proName }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
           </el-col>
-          <el-col :span="12">
-          <el-form-item label="交易模式" prop="tradeMode">
-            <el-input v-model="form.tradeMode" placeholder="请输入交易模式" />
-          </el-form-item>
+          <el-col :span="10">
+            <el-form-item label="交易模式" prop="tradeMode">
+              <el-select width="200px" v-model="form.tradeMode" placeholder="请选择交易模式"
+                         clearable
+                         filterable
+              >
+                <el-option
+                  v-for="dict in tradeModeOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictLabel"
+                  :value="dict.dictValue"
+                ></el-option>
+              </el-select>
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -193,7 +209,7 @@
             <el-form-item label="状态">
               <el-radio-group v-model="form.status">
                 <el-radio
-                  v-for="dict in statusOptions"
+                  v-for="dict in typeOptions"
                   :key="dict.dictValue"
                   :label="dict.dictValue"
                 >{{dict.dictLabel}}</el-radio>
@@ -217,16 +233,18 @@
 
 <script>
 
-  import { listKnowledge, getKnowledge, delKnowledge, addKnowledge, updateKnowledge, exportKnowledge } from "@/api/pro/knowledge";
+  import { listKnowledge, getKnowledge, delKnowledge, addKnowledge, updateKnowledge } from "@/api/pro/knowledge";
+  import { getProdict } from '@/api/pro/proinfo';
    import Editor from '@/components/Editor';
 
 export default {
-  name: "Notice",
   components: {
     Editor
   },
   data() {
     return {
+      // 项目名称字典
+      proInfoDict: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -247,7 +265,7 @@ export default {
       open: false,
       // 类型数据字典
       statusOptions: [],
-      // 状态数据字典
+      // 日报状态数据字典
       typeOptions: [],
       // 查询参数
       queryParams: {
@@ -260,28 +278,31 @@ export default {
         status: undefined
       },
       // 表单参数
-      form: {},
+      form: {
+        status:"1"
+      },
       // 表单校验
       rules: {
-        noticeTitle: [
-          { required: true, message: "公告标题不能为空", trigger: "blur" }
+        knowledgeTitle: [
+          { required: true, message: "问题描述不能为空", trigger: "blur" }
         ],
-        noticeType: [
-          { required: true, message: "公告类型不能为空", trigger: "blur" }
-        ]
+        proNum: [
+          { required: true, message: "项目编号不能为空", trigger: "blur" }
+        ],
+        tradeMode: [
+          { required: true, message: "交易模式不能为空", trigger: "blur" }
+        ],
       }
     };
   },
   created() {
+    this.getProDict()
     this.getList();
     // 获取交易模式字典
     this.getDicts('pro_trade_mode').then(response => {
       this.tradeModeOptions = response.data
     })
-    this.getDicts("sys_notice_status").then(response => {
-      this.statusOptions = response.data;
-    });
-    this.getDicts("sys_notice_type").then(response => {
+    this.getDicts("sys_knowledge_status").then(response => {
       this.typeOptions = response.data;
     });
   },
@@ -295,14 +316,6 @@ export default {
         this.loading = false;
       });
     },
-    // 公告状态字典翻译
-    statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status);
-    },
-    // 公告状态字典翻译
-    typeFormat(row, column) {
-      return this.selectDictLabel(this.typeOptions, row.noticeType);
-    },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -314,7 +327,9 @@ export default {
         knowledgeId: undefined,
         knowledgeTitle: undefined,
         knowledgeContent: undefined,
-        status: "0"
+        proNum:undefined,
+        tradeMode:undefined,
+        status: "0",
       };
       this.resetForm("form");
     },
@@ -330,7 +345,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.noticeId)
+      this.ids = selection.map(item => item.knowledgeId)
       this.single = selection.length!=1
       this.multiple = !selection.length
     },
@@ -338,24 +353,24 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加公告";
+      this.title = "新增知识库数据";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const noticeId = row.noticeId || this.ids
-      getNotice(noticeId).then(response => {
+      const knowledgeId = row.knowledgeId || this.ids
+      getKnowledge(knowledgeId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改公告";
+        this.title = "修改知识库数据";
       });
     },
     /** 提交按钮 */
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.noticeId != undefined) {
-            updateNotice(this.form).then(response => {
+          if (this.form.knowledgeId != undefined) {
+            updateKnowledge(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
@@ -365,7 +380,7 @@ export default {
               }
             });
           } else {
-            addNotice(this.form).then(response => {
+            addKnowledge(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
@@ -380,30 +395,28 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const noticeIds = row.noticeId || this.ids
-      this.$confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项?', "警告", {
+      const knowledgeId = row.knowledgeId || this.ids
+      this.$confirm('是否确认删除该数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return delNotice(noticeIds);
+          return delKnowledge(knowledgeId);
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
         }).catch(function() {});
+    },
+    /** 获取所有项目名称*/
+    getProDict() {
+      getProdict().then(responce => {
+        this.proInfoDict = responce.data
+      })
     }
   },
   watch: {
     // 处理交易模式
-    tradeModeFormat() {
-      this.queryParams.tradeMode = this.tradeModeFormat.join(',')
-    },
     // 处理交易模式
-    tradeModeSelect() {
-      if (this.tradeModeSelect.length !== 0) {
-        this.form.tradeMode = this.tradeModeSelect.join(',')
-      }
-    }
   }
 };
 </script>

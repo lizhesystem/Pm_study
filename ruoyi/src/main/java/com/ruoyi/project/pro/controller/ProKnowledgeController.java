@@ -1,6 +1,9 @@
 package com.ruoyi.project.pro.controller;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,14 +25,13 @@ import com.ruoyi.framework.web.page.TableDataInfo;
 
 /**
  * 知识库Controller
- * 
+ *
  * @author lizhe
  * @date 2020-01-05
  */
 @RestController
 @RequestMapping("/pro/knowledge")
-public class ProKnowledgeController extends BaseController
-{
+public class ProKnowledgeController extends BaseController {
     @Autowired
     private IProKnowledgeService proKnowledgeService;
 
@@ -38,8 +40,7 @@ public class ProKnowledgeController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('pro:knowledge:list')")
     @GetMapping("/list")
-    public TableDataInfo list(ProKnowledge proKnowledge)
-    {
+    public TableDataInfo list(ProKnowledge proKnowledge) {
         startPage();
         List<ProKnowledge> list = proKnowledgeService.selectProKnowledgeList(proKnowledge);
         return getDataTable(list);
@@ -51,8 +52,7 @@ public class ProKnowledgeController extends BaseController
     @PreAuthorize("@ss.hasPermi('pro:knowledge:export')")
     @Log(title = "知识库", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
-    public AjaxResult export(ProKnowledge proKnowledge)
-    {
+    public AjaxResult export(ProKnowledge proKnowledge) {
         List<ProKnowledge> list = proKnowledgeService.selectProKnowledgeList(proKnowledge);
         ExcelUtil<ProKnowledge> util = new ExcelUtil<ProKnowledge>(ProKnowledge.class);
         return util.exportExcel(list, "knowledge");
@@ -63,8 +63,7 @@ public class ProKnowledgeController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('pro:knowledge:query')")
     @GetMapping(value = "/{knowledgeId}")
-    public AjaxResult getInfo(@PathVariable("knowledgeId") Long knowledgeId)
-    {
+    public AjaxResult getInfo(@PathVariable("knowledgeId") Long knowledgeId) {
         return AjaxResult.success(proKnowledgeService.selectProKnowledgeById(knowledgeId));
     }
 
@@ -74,8 +73,9 @@ public class ProKnowledgeController extends BaseController
     @PreAuthorize("@ss.hasPermi('pro:knowledge:add')")
     @Log(title = "知识库", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody ProKnowledge proKnowledge)
-    {
+    public AjaxResult add(@RequestBody ProKnowledge proKnowledge) {
+        proKnowledge.setCreateTime(DateUtils.getNowDate());
+        proKnowledge.setCreateBy(SecurityUtils.getUsername());
         return toAjax(proKnowledgeService.insertProKnowledge(proKnowledge));
     }
 
@@ -85,8 +85,10 @@ public class ProKnowledgeController extends BaseController
     @PreAuthorize("@ss.hasPermi('pro:knowledge:edit')")
     @Log(title = "知识库", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody ProKnowledge proKnowledge)
-    {
+    public AjaxResult edit(@RequestBody ProKnowledge proKnowledge) {
+        // 设置更新时间还有更新人
+        proKnowledge.setUpdateTime(DateUtils.getNowDate());
+        proKnowledge.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(proKnowledgeService.updateProKnowledge(proKnowledge));
     }
 
@@ -95,9 +97,8 @@ public class ProKnowledgeController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('pro:knowledge:remove')")
     @Log(title = "知识库", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{knowledgeIds}")
-    public AjaxResult remove(@PathVariable Long[] knowledgeIds)
-    {
+    @DeleteMapping("/{knowledgeIds}")
+    public AjaxResult remove(@PathVariable Long[] knowledgeIds) {
         return toAjax(proKnowledgeService.deleteProKnowledgeByIds(knowledgeIds));
     }
 }

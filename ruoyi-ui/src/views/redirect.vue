@@ -1,6 +1,5 @@
 <script>
 export default {
-  // 没有用到
   created() {
     debugger
     const { params, query } = this.$route
